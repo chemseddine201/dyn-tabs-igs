@@ -1,0 +1,20 @@
+.rc-dyn-tabs-tablist {
+    background-color: #333333;
+}
+
+.rc-dyn-tabs-tab>.rc-dyn-tabs-title {
+    background-color: inherit;
+}
+
+.rc-dyn-tabs-tab.rc-dyn-tabs-selected>.rc-dyn-tabs-title {
+    background-color: red;
+}
+
+.rc-dyn-tabs-title,
+.rc-dyn-tabs-close {
+    color: white;
+}
+
+.rc-dyn-tabs-tab.rc-dyn-tabs-hover {
+    background-color: #532727;
+}
