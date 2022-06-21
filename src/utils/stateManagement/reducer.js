@@ -47,6 +47,13 @@ export default function reducer(state, action) {
       console.log('save', draftTabs, newDraftTabs);
       return {draftTabs: newDraftTabs, openTabIDs: state.openTabIDs, selectedTabID: state.selectedTabID};
     }
+    case actions.rename: {
+      const {data} = action;
+      const {draftTabs} = state;
+      const newDraftTabs = {...draftTabs, data};
+      console.log('rename', draftTabs, newDraftTabs);
+      return {draftTabs: newDraftTabs, openTabIDs: state.openTabIDs, selectedTabID: state.selectedTabID};
+    }
     default:
       throw new Error(`Undefined action type '${action.type}'`);
   }

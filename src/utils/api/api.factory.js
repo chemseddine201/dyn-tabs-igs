@@ -184,6 +184,11 @@ const _apiProps = {
     const result = this._getFlushEffectsPromise();
     this._save(data);
     return result;
+  },
+  rename: function (data) {
+    const result = this._getFlushEffectsPromise();
+    this._rename(data);
+    return result;
   }
 };
 Helper.setNoneEnumProps(_apiProps, {

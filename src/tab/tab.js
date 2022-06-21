@@ -28,9 +28,15 @@ const TabComponent = function TabComponent(props) {
     onBlur={(e)=>{
       if (tabObj.renamable) {
         e.target.setAttribute("contenteditable", false);
+        let tabName = (e.target.innerText.length < 3 ? api.getOption('defaultTabsName') : e.target.innerText);
         if (e.target.innerText.length < 3) {
-          e.target.innerText = api.getOption('defaultTabsName')
+          e.target.innerText = tabName;
         }
+        //trigger tab rename event
+        api.rename({
+          tabId: tabObj.tabId, 
+          name: tabName
+        });
       }
     }}
     onKeyDown={(e)=> {

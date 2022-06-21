@@ -38,6 +38,10 @@ Object.assign(BaseApi.prototype, {
     this._dispatch({type: actions.save, data});
     this.__flushEffects();
   },
+  _rename: function (data) {
+    this._dispatch({type: actions.rename, data});
+    this.__flushEffects();
+  },
   __flushEffects: function () {
     this._setFlushState({});
   },
