@@ -61,5 +61,14 @@ const helper = {
   },
   isObj: (obj) => Object.prototype.toString.call(obj) === '[object Object]',
   isArray: (arr) => typeof arr === 'object' && arr.constructor === Array,
+  generateId : (tablist, maxNum) => {
+    let missing = [];
+    for (var i = 1; i <= maxNum; i++) {
+      if (tablist.indexOf(i+'') == -1) {
+        missing.push(i);
+      }
+    }
+    return missing[0];
+   }
 };
 export default helper;

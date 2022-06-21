@@ -180,10 +180,10 @@ const _apiProps = {
     this._refresh();
     return result;
   },
-  reset: function () {
-
-  },
   save: function (data) {
+    const result = this._getFlushEffectsPromise();
+    this._save(data);
+    return result;
   }
 };
 Helper.setNoneEnumProps(_apiProps, {

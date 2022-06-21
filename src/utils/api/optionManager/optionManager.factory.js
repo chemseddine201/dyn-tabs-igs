@@ -62,7 +62,7 @@ Object.assign(OptionManager.prototype, {
     // set this.initialTabs and this.initialState
     const {selectedTabID, tabs} = this.options,
       openTabIDs = [],
-      savedTabs = {};
+      draftTabs = {};
     tabs.forEach((tab) => {
       const newTab = this.validateTabData(tab);
       this.initialTabs.push(newTab);
@@ -71,7 +71,7 @@ Object.assign(OptionManager.prototype, {
     this.initialState = {
       selectedTabID: selectedTabID + '', //make sure it is type of string
       openTabIDs,
-      savedTabs,
+      draftTabs,
     };
     return this;
   },

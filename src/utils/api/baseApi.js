@@ -34,6 +34,10 @@ Object.assign(BaseApi.prototype, {
     this._dispatch({type: actions.sort, tabId});
     this.__flushEffects();
   },
+  _save: function (data) {
+    this._dispatch({type: actions.save, data});
+    this.__flushEffects();
+  },
   __flushEffects: function () {
     this._setFlushState({});
   },

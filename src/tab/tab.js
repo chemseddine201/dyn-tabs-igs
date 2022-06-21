@@ -44,6 +44,7 @@ const TabComponent = function TabComponent(props) {
     {tabObj.title}
   </div>
   }
+
   return (
     <li      
       {...propsManager.getTabProps()}

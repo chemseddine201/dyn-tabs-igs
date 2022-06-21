@@ -2,30 +2,20 @@ import React, {memo, useEffect } from 'react';
 import Sortable from 'sortablejs';
 //import { ReactSortable } from "react-sortablejs";
 import {ApiContext, StateContext} from '../utils/context.js';
+import helper from '../utils/helper.js';
 import Tab from '../tab/tab.js';
 import tablistPropsManager from './tablistPropsManager.js';
- //TODO: generate new id on add and on delete
+//TODO: generate new id on add and on delete
 // save sortable state
 // make globale state for tabs and saved tabs
 
- const generateId = (tablist, maxNum) => {
-  let missing = [];
-  for (var i = 1; i <= maxNum; i++) {
-    if (tablist.indexOf(`${i}`) == -1) {
-      missing.push(i);
-    }
-  }
-  //console.log(missing, missing[0])
-  return missing[0];
- }
 const TabList = memo(
   function TabList(props) {
-    //console.log(StateContext)
-    const {openTabIDs, selectedTabID, trashedTabs} = React.useContext(StateContext),
+    const state = React.useContext(StateContext),
+    {openTabIDs, selectedTabID, draftTabs} = state,
       api = React.useContext(ApiContext),
       tablistProps = tablistPropsManager({api}),
       hasNewTab = ((typeof (api.getOption('newTab').panelComponent)) !== 'undefined' && typeof api.getOption('newTab') !== 'undefined');
-      //
       //console.log({openTabIDs, selectedTabID, trashedTabs})
       //const st = useSelector(state => state.tablist);
       //
@@ -50,10 +40,10 @@ const TabList = memo(
           (
           (openTabIDs.length < api.getOption('maxTabsLength')) && hasNewTab
           ) ? 
-          (<li 
+          (<><li 
             className="rc-dyn-tabs-tab cursor-pointer"
             onClick={() => {
-              let newId = generateId(openTabIDs, api.getOption('maxTabsLength'));
+              let newId = helper.generateId(openTabIDs, api.getOption('maxTabsLength'));
               let newTab = api.getOption('newTab');
               //let PanelItem = newTab.panelComponent;
               let defaultName = api.getOption('defaultName');
@@ -73,7 +63,15 @@ const TabList = memo(
             }}
           >
             <div className="rc-dyn-tabs-title add-btn"><div className="plus"></div></div>
-          </li>) : null
+          </li>
+          <li style={{padding:"10px", cursor:"pointer"}} onClick={() => {
+              api.save({
+                name: selectedTabID
+              });
+              api.refresh();
+            }}>
+              SAVE
+          </li></>) : null
         }
       </ul>
     );
