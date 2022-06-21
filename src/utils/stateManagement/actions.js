@@ -4,5 +4,7 @@ const actions = {
   active: 'active',
   refresh: 'refresh',
   sort: 'sort',
+  save: 'save',
+  reset: 'reset',
 };
 export default actions;

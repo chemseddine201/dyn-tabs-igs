@@ -11,6 +11,8 @@ const Pub_Sub = function () {
     _onFlushEffects: [],
     _onReady: [],
     onFirstSelect: [],
+    onSave: [], 
+    onTabRename: [],
   };
 };
 Object.assign(Pub_Sub.prototype, {

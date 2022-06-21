@@ -5,14 +5,6 @@ import useDynamicTabs from '../index';
 
 const TabsExample = () => {
     const options = {
-        sortable: true,
-        defaultTabsName:"New Tab",
-        maxTabsLength: 5,
-        newTab: {
-          closable: true,
-          renamable: true,
-          panelComponent: (porps) => <p> panel {porps.id} </p>,
-        },
         tabs: [
           {
             id: '1',
@@ -28,7 +20,6 @@ const TabsExample = () => {
           },
         ],
         selectedTabID: '1',
-        sortable: {}
       };
       const [TabList, PanelList] = useDynamicTabs(options);
       return (

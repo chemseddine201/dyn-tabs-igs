@@ -18,10 +18,11 @@ module.exports = (env) => {
     module: {
       rules: [
         {
-          test: /\.m?js$/,
+          //test: /\.m?js$/,
+          test: /\.js|\.jsx|\.ts$/,
           exclude: /(node_modules|bower_components)/,
           use: {
-            loader: 'babel-loader',
+            loader: ['babel-loader', 'eslint-loader'],
           },
         },
         {

@@ -1,12 +1,12 @@
-import React, {memo, useEffect, cloneElement, Fragment, useState } from 'react';
-//import { ReactSortable } from "react-sortablejs";
+import React, {memo, useEffect } from 'react';
 import Sortable from 'sortablejs';
+//import { ReactSortable } from "react-sortablejs";
 import {ApiContext, StateContext} from '../utils/context.js';
 import Tab from '../tab/tab.js';
 import tablistPropsManager from './tablistPropsManager.js';
  //TODO: generate new id on add and on delete
- // save sortable state
- //
+// save sortable state
+// make globale state for tabs and saved tabs
 
  const generateId = (tablist, maxNum) => {
   let missing = [];
@@ -20,10 +20,14 @@ import tablistPropsManager from './tablistPropsManager.js';
  }
 const TabList = memo(
   function TabList(props) {
-    const {openTabIDs, selectedTabID} = React.useContext(StateContext),
+    //console.log(StateContext)
+    const {openTabIDs, selectedTabID, trashedTabs} = React.useContext(StateContext),
       api = React.useContext(ApiContext),
       tablistProps = tablistPropsManager({api}),
       hasNewTab = ((typeof (api.getOption('newTab').panelComponent)) !== 'undefined' && typeof api.getOption('newTab') !== 'undefined');
+      //
+      //console.log({openTabIDs, selectedTabID, trashedTabs})
+      //const st = useSelector(state => state.tablist);
       //
       useEffect(() => {
         if(api && api.getOption('sortable')) {

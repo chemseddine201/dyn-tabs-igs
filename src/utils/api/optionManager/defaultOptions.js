@@ -26,11 +26,23 @@ Object.assign(DefaultOptions.prototype, {
       onLoad: function () {},
       onDestroy: function () {},
       onInit: function () {},
+      onSave: function () {},
+      onTabRename: function () {},
       accessibility: true,
       isVertical: false,
       defaultPanelComponent: function defaultPanelComponent() {
         return <div></div>;
       },
+      sortable: true,
+      sortableOptions: {},
+      defaultTabsName:"New Tab",
+      maxTabsLength: 10,
+      newTab: {
+        closable: true,
+        renamable: true,
+        panelComponent: (porps) => <p> panel {porps.id} </p>,
+      },
+      initialValues: {},
     };
     let _direction = this.defaultDirection,
       _tabComponent = this._DefaulTabInnerComponent;

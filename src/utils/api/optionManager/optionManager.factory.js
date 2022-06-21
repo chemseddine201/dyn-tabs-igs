@@ -61,7 +61,8 @@ Object.assign(OptionManager.prototype, {
   _setInitialData: function () {
     // set this.initialTabs and this.initialState
     const {selectedTabID, tabs} = this.options,
-      openTabIDs = [];
+      openTabIDs = [],
+      savedTabs = {};
     tabs.forEach((tab) => {
       const newTab = this.validateTabData(tab);
       this.initialTabs.push(newTab);
@@ -70,6 +71,7 @@ Object.assign(OptionManager.prototype, {
     this.initialState = {
       selectedTabID: selectedTabID + '', //make sure it is type of string
       openTabIDs,
+      savedTabs,
     };
     return this;
   },
@@ -94,6 +96,8 @@ Object.assign(OptionManager.prototype, {
         return {
           title: '',
           tooltip: '',
+          renameable: true,
+          maxTabsLength: 10,
           panelComponent: this.options.defaultPanelComponent,
           closable: true,
           iconClass: '',

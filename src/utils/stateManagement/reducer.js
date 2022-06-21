@@ -3,6 +3,7 @@ import helper from '../helper';
 export default function reducer(state, action) {
   switch (action.type) {
     case actions.close: {
+      confirm('Are you sure to close this tab?');
       const {openTabIDs: arr} = state,
         removedItemIndex = arr.indexOf(action.tabId);
       if (removedItemIndex >= 0) {
@@ -30,6 +31,26 @@ export default function reducer(state, action) {
       return state;
     }
     case actions.sort: {
+      const arr = state.openTabIDs,
+        newArr = action.tabId,
+        newArrCount = newArr.length;
+      if (arr.length !== newArrCount) return state;
+      for (let i = 0; i < newArrCount; i++) {
+        if (arr.indexOf(newArr[i]) === -1) return state;
+      }
+      return {selectedTabID: state.selectedTabID, openTabIDs: newArr};
+    }
+    case actions.save: {
+      const arr = state.openTabIDs,
+        newArr = action.tabId,
+        newArrCount = newArr.length;
+      if (arr.length !== newArrCount) return state;
+      for (let i = 0; i < newArrCount; i++) {
+        if (arr.indexOf(newArr[i]) === -1) return state;
+      }
+      return {selectedTabID: state.selectedTabID, openTabIDs: newArr};
+    }
+    case actions.reset: {
       const arr = state.openTabIDs,
         newArr = action.tabId,
         newArrCount = newArr.length;

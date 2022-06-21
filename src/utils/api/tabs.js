@@ -6,6 +6,7 @@ function Tabs({initialTabs} = {initialTabs: []}) {
     });
   }
 }
+
 Object.assign(Tabs.prototype, {
   _addTab: function (tabObj) {
     this._data.push(tabObj);

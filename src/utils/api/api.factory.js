@@ -180,6 +180,11 @@ const _apiProps = {
     this._refresh();
     return result;
   },
+  reset: function () {
+
+  },
+  save: function (data) {
+  }
 };
 Helper.setNoneEnumProps(_apiProps, {
   onChange: function ({newState, oldState, closedTabIDs, openedTabIDs, isSwitched}) {

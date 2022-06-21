@@ -12,6 +12,38 @@ const TabComponent = function TabComponent(props) {
     clkHandler = function (e) {
       api.eventHandlerFactory({e, id});
     };
+
+  const TabTitle = ({tabObj, ...props}) => {
+    return <div style={{
+      width:"100%",
+      minHeight:"100%",
+      display: "flex",
+      justifyContent: "center"
+    }}
+    onDoubleClick={(e)=> {
+      if (tabObj.renamable) {
+        e.target.setAttribute("contenteditable", true)
+      }
+    }} 
+    onBlur={(e)=>{
+      if (tabObj.renamable) {
+        e.target.setAttribute("contenteditable", false);
+        if (e.target.innerText.length < 3) {
+          e.target.innerText = api.getOption('defaultTabsName')
+        }
+      }
+    }}
+    onKeyDown={(e)=> {
+      var key = e.which || e.keyCode || e.charCode;
+      if(key == 13 || key == 46 || e.target.innerText.length > 20) {
+        e.preventDefault();
+        return;
+      }
+    }}
+  >
+    {tabObj.title}
+  </div>
+  }
   return (
     <li      
       {...propsManager.getTabProps()}
@@ -19,35 +51,7 @@ const TabComponent = function TabComponent(props) {
         clkHandler(e);
       }}>
           <TabInnerComponent {...propsManager.getTabInnerProps()}>
-          <div style={{
-              width:"100%",
-              minHeight:"100%",
-              display: "flex",
-              justifyContent: "center"
-            }}
-            onDoubleClick={(e)=>{
-              if (tabObj.renamable) {
-                e.target.setAttribute("contenteditable", true)
-              }
-            }} 
-            onBlur={(e)=>{
-              if (tabObj.renamable) {
-                e.target.setAttribute("contenteditable", false);
-                if (e.target.innerText.length < 3) {
-                  e.target.innerText = api.getOption('defaultTabsName')
-                }
-              }
-            }}
-            onKeyDown={(e)=>{
-              var key = e.which || e.keyCode || e.charCode;
-              if(key == 13 || key == 46 || e.target.innerText.length > 20) {
-                e.preventDefault();
-                return;
-              }
-            }}
-          >
-            {tabObj.title}
-          </div>
+            <TabTitle tabObj={tabObj} />
           </TabInnerComponent>
           {tabObj.closable ? <span {...propsManager.getCloseIconProps()}>&times;</span> : null}
     </li>
