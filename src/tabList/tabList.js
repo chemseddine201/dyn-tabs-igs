@@ -40,7 +40,8 @@ const TabList = memo(
           (
           (openTabIDs.length < api.getOption('maxTabsLength')) && hasNewTab
           ) ? 
-          (<><li 
+          (<>
+          <li 
             className="rc-dyn-tabs-tab cursor-pointer"
             onClick={() => {
               let newId = helper.generateId(openTabIDs, api.getOption('maxTabsLength'));
@@ -68,7 +69,12 @@ const TabList = memo(
           </li>
           <li style={{padding:"10px", cursor:"pointer"}} onClick={() => {
               api.save({
-                name: selectedTabID
+                //name: props.name,
+                id: `${selectedTabID}`,
+                values: {
+                  title: document.querySelector(`.rc-dyn-tabs-title[tab-id="${selectedTabID}"]`).innerText,
+                  content: `This is panel data ${selectedTabID}`,
+                },
               });
               api.refresh();
             }}>

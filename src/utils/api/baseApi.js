@@ -38,7 +38,7 @@ Object.assign(BaseApi.prototype, {
     this._dispatch({type: actions.save, data});
     this.__flushEffects();
   },
-  _rename: function (data) {// rnamed
+  _rename: function (data) {
     const id = (parseInt(data.tabId, 10)-1);
     this._data[id]['title'] = `${data.name}`;
     this._dispatch({type: actions.rename, data});

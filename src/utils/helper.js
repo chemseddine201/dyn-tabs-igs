@@ -9,6 +9,7 @@ const helper = {
       selectedTabID: state.selectedTabID,
       openTabIDs: (state.openTabIDs || []).slice(),
       draftTabs: (state.draftTabs || {}),
+      name: `${state.name}`
     };
   },
   assingAll: function (targetObj, ...sourcObjs) {

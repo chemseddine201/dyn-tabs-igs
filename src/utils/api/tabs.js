@@ -1,6 +1,5 @@
-function Tabs({initialTabs=[], draftTabs={}, ...props}) {
+function Tabs({initialTabs=[]}) {
   this._data = [];
-  this._draftTabs = {...draftTabs};
   if (initialTabs && initialTabs.constructor === Array && initialTabs.length) {
     initialTabs.forEach((tab) => {
       this._addTab(tab);
@@ -10,9 +9,6 @@ function Tabs({initialTabs=[], draftTabs={}, ...props}) {
 
 Object.assign(Tabs.prototype, {
   _addTab: function (tabObj) {
-    let state = this._helper.getCopyState(this.state);
-    tabObj['title'] = state.draftTabs[tabObj['id']] || `${tabObj.title}`;
-    console.log(tabObj['title']);
     this._data.push(tabObj);
     return this;
   },

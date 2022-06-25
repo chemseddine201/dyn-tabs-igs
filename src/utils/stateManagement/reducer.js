@@ -4,13 +4,20 @@ export default function reducer(state, action) {
   switch (action.type) {
     case actions.close: {
       const status = confirm('Are you sure to close this tab?');
-      if (status) {
-        const {openTabIDs: arr} = state,
+      if (status && true) {
+        const {openTabIDs: arr, draftTabs} = state,
         removedItemIndex = arr.indexOf(action.tabId);
+        console.log(removedItemIndex)
         if (removedItemIndex >= 0) {
+          //remove id
           const newArr = arr.slice();
           newArr.splice(removedItemIndex, 1);
-          return {selectedTabID: state.selectedTabID, openTabIDs: newArr};
+          //remove tab if saved
+          if (draftTabs[state.name] && draftTabs[state.name][action.tabId]){
+            delete draftTabs[state.name][action.tabId];
+          }
+          //return updated state state
+          return {...state, openTabIDs: newArr, draftTabs};
         }
       }
       return state;
@@ -22,7 +29,7 @@ export default function reducer(state, action) {
       if (arr.indexOf(tabId) === -1) {
         const newArr = arr.slice();
         newArr.push(tabId);
-        return {selectedTabID: state.selectedTabID, openTabIDs: newArr};
+        return {...state, selectedTabID: state.selectedTabID, openTabIDs: newArr};
       }
       return state;
     }
@@ -30,7 +37,9 @@ export default function reducer(state, action) {
       return helper.getCopyState(state);
     case actions.active: {
       const tabId = action.tabId;
-      if (state.selectedTabID !== tabId) return {selectedTabID: tabId, openTabIDs: state.openTabIDs};
+      if (state.selectedTabID !== tabId) {
+        return {...state, selectedTabID: tabId, openTabIDs: state.openTabIDs};
+      }
       return state;
     }
     case actions.sort: {
@@ -41,23 +50,24 @@ export default function reducer(state, action) {
       for (let i = 0; i < newArrCount; i++) {
         if (arr.indexOf(newArr[i]) === -1) return state;
       }
-      return {selectedTabID: state.selectedTabID, openTabIDs: newArr};
+      return {...state, selectedTabID: state.selectedTabID, openTabIDs: newArr};
     }
     case actions.save: {
-      const {data} = action;
-      const {draftTabs} = state;
-      const newDraftTabs = {...draftTabs, data};
-      
-      console.log('save', draftTabs, newDraftTabs);
-      return {draftTabs: newDraftTabs, openTabIDs: state.openTabIDs, selectedTabID: state.selectedTabID};
+      const { data } = action;
+      const id = parseInt(data.id, 10);
+      let oldData = state.draftTabs;
+      if(oldData[state.name]) {
+        oldData[state.name][id] = data.values;
+      } else {
+        oldData[state.name] = {};
+        oldData[state.name][id] = data.values;
+      }
+      const updatedState = {...state, draftTabs: oldData};
+      console.log('upd', updatedState);
+      return updatedState;
     }
     case actions.rename: {
-      const {data} = action;
-      const {draftTabs} = state;
-      const newDraftTabs = {...draftTabs, ...{[data['tabId']]:data['name']}};
-      console.log('new names', newDraftTabs);
-
-      return {draftTabs: newDraftTabs, openTabIDs: state.openTabIDs, selectedTabID: state.selectedTabID};
+      return state;
     }
     default:
       throw new Error(`Undefined action type '${action.type}'`);

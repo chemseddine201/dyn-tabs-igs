@@ -5,6 +5,7 @@ import useDynamicTabs from '../index';
 
 const TabsExample = () => {
     const options = {
+        name: "example",
         tabs: [
           {
             id: '1',
@@ -24,8 +25,8 @@ const TabsExample = () => {
       const [TabList, PanelList] = useDynamicTabs(options);
       return (
         <>
-          <TabList></TabList>
-          <PanelList></PanelList>
+          <TabList />
+          <PanelList />
         </>
       );
 }

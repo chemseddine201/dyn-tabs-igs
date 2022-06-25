@@ -10,6 +10,7 @@ Object.assign(DefaultOptions.prototype, {
   },
   _getOptions: function () {
     const _options = {
+      name: "",
       tabs: [],
       selectedTabID: '',
       beforeSelect: function () {

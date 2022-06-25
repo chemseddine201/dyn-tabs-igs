@@ -60,7 +60,8 @@ Object.assign(OptionManager.prototype, {
   },
   _setInitialData: function () {
     // set this.initialTabs and this.initialState
-    const {selectedTabID, tabs} = this.options,
+    console.log(this.options)
+    const {selectedTabID, tabs, name} = this.options,
       openTabIDs = [],
       draftTabs = {};
     tabs.forEach((tab) => {
@@ -70,8 +71,9 @@ Object.assign(OptionManager.prototype, {
     });
     this.initialState = {
       selectedTabID: selectedTabID + '', //make sure it is type of string
-      openTabIDs,
-      draftTabs,
+      openTabIDs: openTabIDs,
+      draftTabs: draftTabs,
+      name: name
     };
     return this;
   },
