@@ -1,4 +1,4 @@
-import React, { cloneElement, Fragment } from 'react';
+import React, { cloneElement } from 'react';
 import Helper from '../../helper.js';
 const {throwMissingParam: missingParamEr, getSavedTabs, getSelectedTab} = Helper;
 

@@ -1,4 +1,3 @@
-import React from 'react';
 import 'dyn-tabs-igs/style/react-dyn-tabs.css';
 import 'dyn-tabs-igs/themes/react-dyn-tabs-card.css';
 import useDynamicTabs from './index';

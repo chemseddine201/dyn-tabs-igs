@@ -1,4 +1,3 @@
-import React from 'react';
 const DefaultOptions = function (DefaulTabInnerComponent = null) {
   this.defaultDirection = 'ltr';
   this._DefaulTabInnerComponent = DefaulTabInnerComponent;
