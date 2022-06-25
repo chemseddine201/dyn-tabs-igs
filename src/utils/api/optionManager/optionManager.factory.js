@@ -1,6 +1,7 @@
-import React from 'react';
+import React, { cloneElement, Fragment } from 'react';
 import Helper from '../../helper.js';
-const {throwMissingParam: missingParamEr, getSavedTabs} = Helper;
+const {throwMissingParam: missingParamEr, getSavedTabs, getSelectedTab} = Helper;
+
 function OptionManager(getDeps, {options}) {
   const {globalDefaultOptions} = getDeps();
   this._defaultOptions = globalDefaultOptions;
@@ -9,8 +10,10 @@ function OptionManager(getDeps, {options}) {
   this.setting = {};
   this.initialState = {};
   this.initialTabs = [];
+  this.storageKey = options.name;
   this._setSetting()._setInitialData();
 }
+
 Object.assign(OptionManager.prototype, {
   getOption: function (optionName) {
     if (optionName === 'tabs') {
@@ -58,37 +61,48 @@ Object.assign(OptionManager.prototype, {
       throw 'Invalid argument in "useDynamicTabs" function. Argument must be type of an object';
     return this;
   },
+  _generateSelectedId: function (openTabIDs, id) {
+    let savedID = getSelectedTab(this.storageKey)
+    if (savedID && openTabIDs.includes(savedID)) {
+      return savedID
+    } else if (id && openTabIDs.includes(id)) {
+      return id
+    } 
+    return openTabIDs.at(-1)
+  },
   _setInitialData: function () {
     // set this.initialTabs and this.initialState
-    const {selectedTabID, tabs, name, storageKey, defaultPanelComponent} = this.options,
-      openTabIDs = [],
-      draftTabs = getSavedTabs(storageKey);
-
+    const {selectedTabID, tabs, name} = this.options,
+      DefaultPanelComponent =  this.options.newTab?.panelComponent || this._defaultOptions.newTab?.panelComponent,
+      draftTabs = getSavedTabs(this.storageKey);
+      var openTabIDs = [];
     //set all tabs in state
-    let uptabs = [];
-    Object.values(draftTabs[name]).forEach((tab) => {
-      const newTab = {
-        id: tab.id,
-        title: tab.title,
-        closable: tab.closable || true,
-        renamable: tab.renamable || true,
-        panelComponent: tab.panelComponent,
-      };
-      console.log(newTab)
-      //
-      //const newTab = this.validateTabData(tab);
-      this.initialTabs.push(newTab);
-      openTabIDs.push(newTab.id);
-    });
-
-
+    let savedTabs = [];
+    if (this.validateObjectiveTabData(draftTabs) && draftTabs && draftTabs[name] && Object.keys(draftTabs[name]).length) {
+      Object.values(draftTabs[name]).forEach((tab, index) => {
+        const id =  tab.tabId || (index+1 + '');
+        const newTab = {
+          id,
+          title: tab.title,
+          closable: tab.closable || true,
+          renamable: tab.renamable || true,
+          panelComponent: (props) => cloneElement(<DefaultPanelComponent {...props} />, {values: tab || {} }),
+        };
+        const _tab = this.validateTabData(newTab);
+        savedTabs.push(_tab);
+      });
+      this.initialTabs = [...savedTabs ];
+      openTabIDs = this.initialTabs.map(tab => tab.id);
+    } else {
+      this.initialTabs = [ ...tabs ];
+      openTabIDs = tabs.map(tab => tab.id);
+    }
     //
     this.initialState = {
-      selectedTabID: selectedTabID + '', //make sure it is type of string
+      selectedTabID: this._generateSelectedId(openTabIDs, selectedTabID), //make sure it is type of string
       openTabIDs: openTabIDs,
       draftTabs: draftTabs,
-      name: name,
-      
+      name: name
     };
     return this;
   },

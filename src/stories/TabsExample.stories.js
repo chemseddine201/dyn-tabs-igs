@@ -7,20 +7,22 @@ const TabsExample = () => {
     const options = {
         name: "example",
         useStorage: true,
-        //storageKey: "example",
-        defaultPanelComponent: {
+        storageKey: "example",
+        newTab: {
           closable: true,
           renamable: true,
-          panelComponent: (porps) => <p> panel 1 </p>,
+          selected: true,
+          panelComponent: (props) => <p> my custome panel {props.id} </p>,
         },
         tabs: [
           {
-            id: '1',
-            title: 'tab 1',
+            id: "1",
+            title: "Tab 1",
             closable: true,
             renamable: true,
-            panelComponent: (porps) => <p> panel 1 </p>,
-          },
+            selected: true,
+            panelComponent: (props) => <p> my custome panel {props.id} </p>,
+          }
         ],
         selectedTabID: '1',
       };

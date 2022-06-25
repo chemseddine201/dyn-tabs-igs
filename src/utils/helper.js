@@ -78,6 +78,13 @@ const helper = {
       if(savedTabs) return savedTabs.draftTabs
     }
     return {};
+  },
+  getSelectedTab: (name="igs-dynamic-tabs") => {
+    if(localStorage.getItem(name)) {
+      const savedTabs = JSON.parse(localStorage.getItem(name));
+      if (savedTabs) return savedTabs.selectedTabID
+    }
+    return '';
   }
 };
 export default helper;

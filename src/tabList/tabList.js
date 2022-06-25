@@ -5,9 +5,6 @@ import {ApiContext, StateContext} from '../utils/context.js';
 import helper from '../utils/helper.js';
 import Tab from '../tab/tab.js';
 import tablistPropsManager from './tablistPropsManager.js';
-//TODO: generate new id on add and on delete
-// save sortable state
-// make globale state for tabs and saved tabs
 
 const TabList = memo(
   function TabList(props) {
@@ -52,11 +49,11 @@ const TabList = memo(
               api.open({
                 id: `${newId}`,
                 title: defaultName ? `${defaultName}` : `New Tab`,
-                //panelComponent: (props) => <Fragment key={newId}>{cloneElement(<PanelItem />, { ...props, tabId: `${newId}` })}</Fragment>,
                 ...newTab,
               })
               .then(() => {
                 //select the new added tab
+                //console.log(newId)
                 api.select(`${newId}`);
                 api.refresh();
               })
@@ -69,14 +66,14 @@ const TabList = memo(
           </li>
           <li style={{padding:"10px", cursor:"pointer"}} onClick={() => {
               api.save({
-                //name: props.name,
                 id: `${selectedTabID}`,
                 values: {
+                  tabId: `${selectedTabID}`,
                   title: document.querySelector(`.rc-dyn-tabs-title[tab-id="${selectedTabID}"]`).innerText,
                   content: `This is panel data ${selectedTabID}`,
                 },
               });
-              api.refresh();
+              //api.refresh();
             }}>
               SAVE
           </li></>) : null

@@ -53,6 +53,7 @@ export default function reducer(state, action) {
       return {...state, selectedTabID: state.selectedTabID, openTabIDs: newArr};
     }
     case actions.save: {
+      //console.log(state);
       const { data } = action;
       const id = parseInt(data.id, 10);
       let oldData = state.draftTabs;
@@ -63,11 +64,20 @@ export default function reducer(state, action) {
         oldData[state.name][id] = data.values;
       }
       const updatedState = {...state, draftTabs: oldData};
-      console.log('upd', updatedState);
       return updatedState;
     }
     case actions.rename: {
-      return state;
+      const { data } = action;
+      const id = parseInt(data.id, 10);
+      let oldData = state.draftTabs;
+      if (oldData[state.name] && oldData[state.name][id]) {
+        //console.log(id, oldData[state.name][id], (oldData[state.name][id])[title]);
+        oldData[state.name][id].title = data.title;
+      }
+      console.log(oldData);
+      const updatedState = {...state, draftTabs: oldData};
+      console.log('upd', updatedState);
+      return updatedState;//updatedState;
     }
     default:
       throw new Error(`Undefined action type '${action.type}'`);

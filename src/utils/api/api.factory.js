@@ -56,7 +56,7 @@ const _apiProps = {
         this.activedTabsHistory.remove(closedTabIDs[i]);
       }
       const isSwitched = previousData.selectedTabID !== currentData.selectedTabID;
-      if (isSwitched && this.isOpen(previousData.selectedTabID) && !this.isSelected(previousData.selectedTabID))
+      if (isSwitched && previousData.selectedTabID && this.isOpen(previousData.selectedTabID) && !this.isSelected(previousData.selectedTabID))
         this.activedTabsHistory.add(previousData.selectedTabID);
     });
     return this;

@@ -43,7 +43,8 @@ Object.assign(DefaultOptions.prototype, {
       newTab: {
         closable: true,
         renamable: true,
-        panelComponent: (porps) => <p> panel {porps.id} </p>,
+        selected: true,
+        panelComponent: (props) => <p> my custome panel {props.id} </p>,
       },
       initialValues: {},
     };
