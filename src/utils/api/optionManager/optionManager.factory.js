@@ -1,6 +1,6 @@
 import React from 'react';
 import Helper from '../../helper.js';
-const {throwMissingParam: missingParamEr} = Helper;
+const {throwMissingParam: missingParamEr, getSavedTabs} = Helper;
 function OptionManager(getDeps, {options}) {
   const {globalDefaultOptions} = getDeps();
   this._defaultOptions = globalDefaultOptions;
@@ -60,20 +60,35 @@ Object.assign(OptionManager.prototype, {
   },
   _setInitialData: function () {
     // set this.initialTabs and this.initialState
-    console.log(this.options)
-    const {selectedTabID, tabs, name} = this.options,
+    const {selectedTabID, tabs, name, storageKey, defaultPanelComponent} = this.options,
       openTabIDs = [],
-      draftTabs = {};
-    tabs.forEach((tab) => {
-      const newTab = this.validateTabData(tab);
+      draftTabs = getSavedTabs(storageKey);
+
+    //set all tabs in state
+    let uptabs = [];
+    Object.values(draftTabs[name]).forEach((tab) => {
+      const newTab = {
+        id: tab.id,
+        title: tab.title,
+        closable: tab.closable || true,
+        renamable: tab.renamable || true,
+        panelComponent: tab.panelComponent,
+      };
+      console.log(newTab)
+      //
+      //const newTab = this.validateTabData(tab);
       this.initialTabs.push(newTab);
       openTabIDs.push(newTab.id);
     });
+
+
+    //
     this.initialState = {
       selectedTabID: selectedTabID + '', //make sure it is type of string
       openTabIDs: openTabIDs,
       draftTabs: draftTabs,
-      name: name
+      name: name,
+      
     };
     return this;
   },
