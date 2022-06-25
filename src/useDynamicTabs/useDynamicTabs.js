@@ -13,6 +13,10 @@ function useDynamicTabs(getDeps, options = {}) {
   api.updateStateRef(state, dispatch).updateFlushState(setFlushState);
   useLayoutEffect(() => {
     api.updateState(state);
+    if (api.optionsManager.options.useStorage) {
+      const key = api.optionsManager.options.storageKey || 'igs-dynamic-tabs';;	
+      localStorage.setItem(`${key}`, JSON.stringify(state));
+    }
   }, [state]);
   useLayoutEffect(() => {
     api.trigger('onLoad', api.userProxy);

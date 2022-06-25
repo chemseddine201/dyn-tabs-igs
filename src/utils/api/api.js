@@ -9,8 +9,6 @@ import BaseApi from './baseApi.js';
 const getDeps = function (options = {}) {
   const activedTabsHistory = new ActivedTabsHistory(),
     optionsManager = new OptionManager({options});
-    //console.log(optionsManager)
-    console.log(this);
   BaseApi.call(this, {
     helper,
     initialState: optionsManager.initialState,

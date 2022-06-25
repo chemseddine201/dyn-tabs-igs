@@ -9,6 +9,7 @@ const helper = {
       selectedTabID: state.selectedTabID,
       openTabIDs: (state.openTabIDs || []).slice(),
       draftTabs: (state.draftTabs || {}),
+      name: `${state.name}`
     };
   },
   assingAll: function (targetObj, ...sourcObjs) {
@@ -70,6 +71,13 @@ const helper = {
       }
     }
     return missing[0];
-   }
+   },
+   getSavedTabs: (name="igs-dynamic-tabs") => {
+    if(localStorage.getItem(name)) {
+      const savedTabs = JSON.parse(localStorage.getItem(name));
+      if(savedTabs) return savedTabs.draftTabs
+    }
+    return {};
+  }
 };
 export default helper;

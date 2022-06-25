@@ -5,6 +5,14 @@ import useDynamicTabs from '../index';
 
 const TabsExample = () => {
     const options = {
+        name: "example",
+        useStorage: true,
+        //storageKey: "example",
+        defaultPanelComponent: {
+          closable: true,
+          renamable: true,
+          panelComponent: (porps) => <p> panel 1 </p>,
+        },
         tabs: [
           {
             id: '1',
@@ -13,19 +21,14 @@ const TabsExample = () => {
             renamable: true,
             panelComponent: (porps) => <p> panel 1 </p>,
           },
-          {
-            id: '2',
-            title: 'tab 2',
-            panelComponent: (porps) => <p> panel 2 </p>,
-          },
         ],
         selectedTabID: '1',
       };
       const [TabList, PanelList] = useDynamicTabs(options);
       return (
         <>
-          <TabList></TabList>
-          <PanelList></PanelList>
+          <TabList />
+          <PanelList />
         </>
       );
 }
