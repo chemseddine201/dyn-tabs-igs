@@ -1,6 +1,6 @@
 {
-  "name": "dyn-tabs-igs",
-  "version": "5.0.0",
+  "name": "@chemseddine201/dyn-tabs-igs",
+  "version": "1.0.0",
   "private": false,
   "author": "dev-javascript <javascript.code.dev@gmail.com>",
   "description": "React dynamic tabs with full API",
