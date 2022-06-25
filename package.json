@@ -1,14 +1,11 @@
 {
-  "name": "dyn-tabs-igs",
+  "name": "@chemstech/dyn-tabs-igs",
   "version": "1.0.0",
   "private": false,
   "author": "dev-javascript <javascript.code.dev@gmail.com>",
   "description": "React dynamic tabs with full API",
   "main": "lib/cjs/index.js",
   "module": "lib/esm/index.js",
-  "publishConfig": {
-    "registry": "https://npm.pkg.github.com/@chemstech"
-  },
   "scripts": {
     "watch": "npm-run-all --parallel watch:*",
     "watch:scss": "sass --watch themes/scss:themes style/scss:style --no-source-map",
@@ -126,6 +123,9 @@
   "repository": {
     "type": "git",
     "url": "git+https://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@github.com/chemseddine201/dyn-tabs-igs.git"
+  },
+  "publishConfig": {
+    "registry": "https://npm.pkg.github.com/@chemstech"
   },
   "bugs": {
     "url": "https://github.com/chemseddine201/dyn-tabs-igs/issues"
