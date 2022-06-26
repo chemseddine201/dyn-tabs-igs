@@ -3,22 +3,18 @@ import helper from '../helper';
 export default function reducer(state, action) {
   switch (action.type) {
     case actions.close: {
-      const status = confirm('Are you sure to close this tab?');
-      if (status && true) {
-        const {openTabIDs: arr, draftTabs} = state,
-        removedItemIndex = arr.indexOf(action.tabId);
-        console.log(removedItemIndex)
-        if (removedItemIndex >= 0) {
-          //remove id
-          const newArr = arr.slice();
-          newArr.splice(removedItemIndex, 1);
-          //remove tab if saved
-          if (draftTabs[state.name] && draftTabs[state.name][action.tabId]){
-            delete draftTabs[state.name][action.tabId];
-          }
-          //return updated state state
-          return {...state, openTabIDs: newArr, draftTabs};
+      const {openTabIDs: arr, draftTabs} = state,
+      removedItemIndex = arr.indexOf(action.tabId);
+      if (removedItemIndex >= 0) {
+        //remove id
+        const newArr = arr.slice();
+        newArr.splice(removedItemIndex, 1);
+        //remove tab if saved
+        if (draftTabs[state.name] && draftTabs[state.name][action.tabId]){
+          delete draftTabs[state.name][action.tabId];
         }
+        //return updated state state
+        return {...state, openTabIDs: newArr, draftTabs};
       }
       return state;
     }

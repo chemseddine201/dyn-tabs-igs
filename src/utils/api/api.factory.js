@@ -169,13 +169,16 @@ const _apiProps = {
     return result;
   },
   close: function (id = missingParamEr('close'), switching = true) {
-    if (id) id = id + ''; //make sure id is string
-    if (switching && this.isOpen(id) && this.isSelected(id)) {
-      const _openTabsId = [...this.stateRef.openTabIDs];
-      _openTabsId.splice(_openTabsId.indexOf(id), 1);
-      this.select(this._findTabIdForSwitching());
-      return this.__close(id);
-    } else return this.__close(id);
+    const status = confirm('Are you sure to close this tab?');
+    if (status && true) {
+      if (id) id = id + ''; //make sure id is string
+      if (switching && this.isOpen(id) && this.isSelected(id)) {
+        const _openTabsId = [...this.stateRef.openTabIDs];
+        _openTabsId.splice(_openTabsId.indexOf(id), 1);
+        this.select(this._findTabIdForSwitching());
+        return this.__close(id);
+      } else return this.__close(id);
+    }
   },
   refresh: function () {
     const result = this._getFlushEffectsPromise();

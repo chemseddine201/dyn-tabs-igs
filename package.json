@@ -1,9 +1,9 @@
 {
   "name": "@chemseddine201/dyn-tabs-igs",
-  "version": "2.0.2",
+  "version": "1.0.0",
   "private": false,
   "author": "dev-javascript <javascript.code.dev@gmail.com>",
-  "description": "React dynamic tabs with full API",
+  "description": "React dynamic tabs for igs system",
   "main": "lib/cjs/index.js",
   "module": "lib/esm/index.js",
   "scripts": {
@@ -122,7 +122,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://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@github.com/chemseddine201/dyn-tabs-igs.git"
+    "url": "git+https://git@github.com:chemseddine201/dyn-tabs-igs.git"
   },
   "publishConfig": {
     "registry": "https://npm.pkg.github.com"

@@ -43,17 +43,14 @@ const TabList = memo(
             onClick={() => {
               let newId = helper.generateId(openTabIDs, api.getOption('maxTabsLength'));
               let newTab = api.getOption('newTab');
-              //let PanelItem = newTab.panelComponent;
               let defaultName = api.getOption('defaultName');
               //
               api.open({
+                ...newTab,
                 id: `${newId}`,
                 title: defaultName ? `${defaultName}` : `New Tab`,
-                ...newTab,
               })
               .then(() => {
-                //select the new added tab
-                //console.log(newId)
                 api.select(`${newId}`);
                 api.refresh();
               })
@@ -64,19 +61,7 @@ const TabList = memo(
               <div className="plus"></div>
             </div>
           </li>
-          <li style={{padding:"10px", cursor:"pointer"}} onClick={() => {
-              api.save({
-                id: `${selectedTabID}`,
-                values: {
-                  tabId: `${selectedTabID}`,
-                  title: document.querySelector(`.rc-dyn-tabs-title[tab-id="${selectedTabID}"]`).innerText,
-                  content: `This is panel data ${selectedTabID}`,
-                },
-              });
-              //api.refresh();
-            }}>
-              SAVE
-          </li></>) : null
+          </>) : null
         }
       </ul>
     );

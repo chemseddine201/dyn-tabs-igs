@@ -18,9 +18,10 @@ TabPropsManager.prototype.getTabProps = function () {
     outputProps.tabIndex = 0;
     outputProps.className += ` ${this._setting.selectedClass}`;
   }
-
+  
   // check if tab is disable
-  if (this._tabObj.disable) {
+  if (this?._tabObj?.disable && this._tabObj.disable) {
+
     outputProps.tabIndex = -1;
     outputProps.className += ` ${this._setting.disableClass}`;
   }
