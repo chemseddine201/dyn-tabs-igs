@@ -1,6 +1,7 @@
 #ide
 /.vscode
 /.history
+/.npmrc
 
 # dependencies
 /node_modules
