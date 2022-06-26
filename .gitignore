@@ -2,7 +2,7 @@
 /.vscode
 /.history
 /.DS_Store
-/.npmrc
+.npmrc
 
 # dependencies
 /node_modules
