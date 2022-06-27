@@ -10,7 +10,8 @@ function OptionManager(getDeps, {options}) {
   this.setting = {};
   this.initialState = {};
   this.initialTabs = [];
-  this.storageKey = options.name;
+  this.storageKey = this.options.storageKey || 'igs-dynamic-tabs';
+  this.name = this.options.name || '';
   this._setSetting()._setInitialData();
 }
 
@@ -62,7 +63,7 @@ Object.assign(OptionManager.prototype, {
     return this;
   },
   _generateSelectedId: function (openTabIDs, id) {
-    let savedID = getSelectedTab(this.storageKey)
+    let savedID = getSelectedTab(this.storageKey, this.name)
     if (savedID && openTabIDs.includes(savedID)) {
       return savedID
     } else if (id && openTabIDs.includes(id)) {
@@ -74,17 +75,17 @@ Object.assign(OptionManager.prototype, {
     // set this.initialTabs and this.initialState
     const {selectedTabID, tabs, name} = this.options,
       DefaultPanelComponent =  this.options.newTab?.panelComponent || this._defaultOptions.newTab?.panelComponent,
-      draftTabs = getSavedTabs(this.storageKey);
+      draftTabs = getSavedTabs(this.storageKey, name);
       var openTabIDs = [];
     //set all tabs in state
     let savedTabs = [];
-    console.log("draftTabs", draftTabs);
-    if (this.validateObjectiveTabData(draftTabs) && draftTabs && draftTabs[name] && Object.keys(draftTabs[name]).length) {
-      Object.values(draftTabs[name]).forEach((tab, index) => {
-        const id =  tab.tabId || (index+1 + '');
+    if (this.validateObjectiveTabData(draftTabs) && Object.keys(draftTabs).length) {
+      Object.values(draftTabs).forEach((tab, index) => {
+        const id = tab.tabId || (index+1 + '');
+        const title = (tab.tabTitle ? `${tab.tabTitle}` : `New ${name}`);
         const newTab = {
-          id,
-          title: tab.title,
+          id: id,
+          title: title,
           closable: tab.closable || true,
           renamable: tab.renamable || true,
           panelComponent: (props) => cloneElement(<DefaultPanelComponent {...props} />, {values: tab || {} }),
@@ -98,7 +99,7 @@ Object.assign(OptionManager.prototype, {
       this.initialTabs = [ ...tabs ];
       openTabIDs = tabs.map(tab => tab.id);
     }
-    console.log("savedTabs", savedTabs);
+    
     //
     this.initialState = {
       selectedTabID: this._generateSelectedId(openTabIDs, selectedTabID), //make sure it is type of string
@@ -129,7 +130,7 @@ Object.assign(OptionManager.prototype, {
         return {
           title: '',
           tooltip: '',
-          renameable: true,
+          renamable: true,
           maxTabsLength: 10,
           panelComponent: this.options.defaultPanelComponent,
           closable: true,

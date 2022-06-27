@@ -16,18 +16,37 @@ const TabList = memo(
       useEffect(() => {
         if (api && api.getOption('sortable')) {
           var el = document.getElementById('dyn-tabs-sortable');
+          const sk = api.getOption('storageKey');
+          const name = api.getOption('name');
           var sortable = Sortable.create(el, {
             handle: ".rc-dyn-tabs-tab[role='tab']",
             ...api.getOption('sortable'),
+            group: `${sk}-orders`,
+            store: {
+              get: function (sortable) {
+                var tabsOrders = [];
+                var ls = localStorage.getItem(sk);
+                if (ls) {
+                  var savedData = JSON.parse(ls);
+                  if (savedData[name]) {
+                    tabsOrders = savedData[name].tabsOrders
+                    return tabsOrders ? tabsOrders.split(',') : [];
+                  }
+                }
+                return tabsOrders;
+              },
+              set: function (sortable) {
+                var tabsOrders = sortable.toArray();
+                var ls = localStorage.getItem(sk);
+                if (ls) {
+                  var savedData = JSON.parse(ls);
+                  savedData[name].tabsOrders = tabsOrders.join(',');
+                  localStorage.setItem(sk, JSON.stringify(savedData));
+                }
+              }
+            }
           });
         }
-        //destroy sortable when component unmount
-        return () => {
-          if (api && api.getOption('sortable')) {
-            sortable.destroy();
-          }
-        };
-
       }, []);
 
     return (
@@ -64,17 +83,6 @@ const TabList = memo(
             <div className="rc-dyn-tabs-title add-btn">
               <div className="plus"></div>
             </div>
-          </li>
-          <li onClick={(e) => {
-            api.save({
-              id: `${api.getOption('selectedTabID')}`,
-              name: 'testname',
-              values: {
-                title: 'New Tab',
-                content: 'just a content',
-              },
-            })
-          }}>SAVE ME
           </li>
           </>) : null
         }

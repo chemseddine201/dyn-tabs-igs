@@ -14,7 +14,9 @@ function useDynamicTabs(getDeps, options = {}) {
   useLayoutEffect(() => {
     const key = (api.optionsManager.options.storageKey?.length ? api.optionsManager.options.storageKey : 'igs-dynamic-tabs');	
     if (api.optionsManager.options.useStorage && true) {
-      localStorage.setItem(`${key}`, JSON.stringify(state));
+      localStorage.setItem(`${key}`, JSON.stringify({
+        [api.optionsManager.options.name]: state
+      }));
     } else {
       localStorage.removeItem(`${key}`);
     }

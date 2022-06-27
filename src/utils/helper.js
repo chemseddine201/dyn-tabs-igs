@@ -72,16 +72,18 @@ const helper = {
     }
     return missing[0];
    },
-   getSavedTabs: (name="igs-dynamic-tabs") => {
-    if(localStorage.getItem(name)) {
-      const savedTabs = JSON.parse(localStorage.getItem(name));
-      if(savedTabs) return savedTabs.draftTabs
+   getSavedTabs: (storageKey, name) => {
+    const ls = localStorage.getItem(storageKey);
+    if (ls) {
+      const savedTabs = JSON.parse(ls)[name];
+      if (savedTabs) return savedTabs.draftTabs
     }
     return {};
   },
-  getSelectedTab: (name="igs-dynamic-tabs") => {
-    if(localStorage.getItem(name)) {
-      const savedTabs = JSON.parse(localStorage.getItem(name));
+  getSelectedTab: (storageKey, name) => {
+    const ls = localStorage.getItem(storageKey);
+    if (ls) {
+      const savedTabs = JSON.parse(ls)[name];
       if (savedTabs) return savedTabs.selectedTabID
     }
     return '';

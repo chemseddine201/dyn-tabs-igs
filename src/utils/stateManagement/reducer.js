@@ -10,8 +10,8 @@ export default function reducer(state, action) {
         const newArr = arr.slice();
         newArr.splice(removedItemIndex, 1);
         //remove tab if saved
-        if (draftTabs[state.name] && draftTabs[state.name][action.tabId]){
-          delete draftTabs[state.name][action.tabId];
+        if (draftTabs && draftTabs[action.tabId]){
+          delete draftTabs[action.tabId];
         }
         //return updated state state
         return {...state, openTabIDs: newArr, draftTabs};
@@ -52,11 +52,11 @@ export default function reducer(state, action) {
       if(!data || !data.id) return state;
       const id = parseInt(data.id, 10);
       let oldData = state.draftTabs;
-      if(oldData[state.name] && oldData[state.name]){
-        oldData[state.name][id] = data.values;
+      if(oldData){
+        oldData[id] = data.values;
       } else {
-        oldData[state.name] = {};
-        oldData[state.name][id] = data.values;
+        oldData = {};
+        oldData[id] = data.values;
       }
       //
       return {...state, draftTabs: oldData};
@@ -65,8 +65,8 @@ export default function reducer(state, action) {
       const { data } = action;
       const id = parseInt(data.id, 10);
       let oldData = state.draftTabs;
-      if (oldData[state.name] && oldData[state.name][id]) {
-        oldData[state.name][id].title = data.title;
+      if (oldData && oldData[id]) {
+        oldData[id].tabTitle = data.title;
       }
       return {...state, draftTabs: oldData};
     }
