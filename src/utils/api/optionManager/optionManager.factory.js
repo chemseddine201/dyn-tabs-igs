@@ -78,6 +78,7 @@ Object.assign(OptionManager.prototype, {
       var openTabIDs = [];
     //set all tabs in state
     let savedTabs = [];
+    console.log("draftTabs", draftTabs);
     if (this.validateObjectiveTabData(draftTabs) && draftTabs && draftTabs[name] && Object.keys(draftTabs[name]).length) {
       Object.values(draftTabs[name]).forEach((tab, index) => {
         const id =  tab.tabId || (index+1 + '');
@@ -97,6 +98,7 @@ Object.assign(OptionManager.prototype, {
       this.initialTabs = [ ...tabs ];
       openTabIDs = tabs.map(tab => tab.id);
     }
+    console.log("savedTabs", savedTabs);
     //
     this.initialState = {
       selectedTabID: this._generateSelectedId(openTabIDs, selectedTabID), //make sure it is type of string

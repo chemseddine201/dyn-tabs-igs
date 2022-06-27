@@ -9,7 +9,7 @@ import tablistPropsManager from './tablistPropsManager.js';
 const TabList = memo(
   function TabList(props) {
     const state = React.useContext(StateContext),
-    {openTabIDs, selectedTabID, draftTabs} = state,
+    {openTabIDs, selectedTabID} = state,
       api = React.useContext(ApiContext),
       tablistProps = tablistPropsManager({api}),
       hasNewTab = (((typeof (api.getOption('newTab').panelComponent)) !== 'undefined') && ((typeof api.getOption('newTab')) !== 'undefined'));
@@ -21,6 +21,13 @@ const TabList = memo(
             ...api.getOption('sortable'),
           });
         }
+        //destroy sortable when component unmount
+        return () => {
+          if (api && api.getOption('sortable')) {
+            sortable.destroy();
+          }
+        };
+
       }, []);
 
     return (

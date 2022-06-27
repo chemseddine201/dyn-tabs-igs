@@ -1,9 +1,9 @@
 {
   "name": "@chemstech/dynamic-draggable-tabs-igs",
-  "version": "1.0.7",
+  "version": "1.0.9",
   "private": false,
-  "author": "dev-javascript <javascript.code.dev@gmail.com>",
-  "description": "React dynamic tabs for igs system",
+  "author": "dev-javascript updated by Lotec-dev.com",
+  "description": "React dynamic draggable tabs for igs system",
   "main": "lib/cjs/index.js",
   "module": "lib/esm/index.js",
   "scripts": {
@@ -104,7 +104,8 @@
     "react-tab",
     "full-api",
     "full-control",
-    "react-dynamic-tabs"
+    "react-dynamic-tabs",
+    "renamable-tabs"
   ],
   "license": "MIT",
   "directories": {

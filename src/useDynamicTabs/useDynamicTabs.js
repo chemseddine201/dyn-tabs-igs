@@ -12,13 +12,13 @@ function useDynamicTabs(getDeps, options = {}) {
     [flushState, setFlushState] = useState({});
   api.updateStateRef(state, dispatch).updateFlushState(setFlushState);
   useLayoutEffect(() => {
-    api.updateState(state);
-    const key = api.optionsManager.options.storageKey || 'igs-dynamic-tabs';	
+    const key = (api.optionsManager.options.storageKey?.length ? api.optionsManager.options.storageKey : 'igs-dynamic-tabs');	
     if (api.optionsManager.options.useStorage && true) {
       localStorage.setItem(`${key}`, JSON.stringify(state));
     } else {
       localStorage.removeItem(`${key}`);
     }
+    api.updateState(state);
   }, [state]);
   useLayoutEffect(() => {
     api.trigger('onLoad', api.userProxy);

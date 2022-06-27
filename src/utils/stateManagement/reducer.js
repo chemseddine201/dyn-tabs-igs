@@ -52,16 +52,12 @@ export default function reducer(state, action) {
       if(!data || !data.id) return state;
       const id = parseInt(data.id, 10);
       let oldData = state.draftTabs;
-      console.log("before", oldData);
       if(oldData[state.name] && oldData[state.name]){
-        console.log("pass 1")
         oldData[state.name][id] = data.values;
       } else {
-        console.log("pass 2")
         oldData[state.name] = {};
         oldData[state.name][id] = data.values;
       }
-      console.log("after", oldData);
       //
       return {...state, draftTabs: oldData};
     }
