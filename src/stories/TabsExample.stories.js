@@ -7,7 +7,7 @@ const TabsExample = () => {
     const options = {
         name: "example",
         useStorage: true,
-        storageKey: "example",
+        storageKey: "example-draft",
         newTab: {
           closable: true,
           renamable: true,

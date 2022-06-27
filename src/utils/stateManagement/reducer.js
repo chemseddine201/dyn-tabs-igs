@@ -19,13 +19,12 @@ export default function reducer(state, action) {
       return state;
     }
     case actions.open: {
-      //console.log(action);
       const arr = state.openTabIDs,
         tabId = action.tabId;
       if (arr.indexOf(tabId) === -1) {
         const newArr = arr.slice();
         newArr.push(tabId);
-        return {...state, selectedTabID: state.selectedTabID, openTabIDs: newArr};
+        return {...state, openTabIDs: newArr};
       }
       return state;
     }
@@ -34,7 +33,7 @@ export default function reducer(state, action) {
     case actions.active: {
       const tabId = action.tabId;
       if (state.selectedTabID !== tabId) {
-        return {...state, selectedTabID: tabId, openTabIDs: state.openTabIDs};
+        return {...state, selectedTabID: tabId};
       }
       return state;
     }
@@ -46,34 +45,34 @@ export default function reducer(state, action) {
       for (let i = 0; i < newArrCount; i++) {
         if (arr.indexOf(newArr[i]) === -1) return state;
       }
-      return {...state, selectedTabID: state.selectedTabID, openTabIDs: newArr};
+      return {...state, openTabIDs: newArr};
     }
     case actions.save: {
-      //console.log(state);
       const { data } = action;
+      if(!data || !data.id) return state;
       const id = parseInt(data.id, 10);
       let oldData = state.draftTabs;
-      if(oldData[state.name]) {
+      console.log("before", oldData);
+      if(oldData[state.name] && oldData[state.name]){
+        console.log("pass 1")
         oldData[state.name][id] = data.values;
       } else {
+        console.log("pass 2")
         oldData[state.name] = {};
         oldData[state.name][id] = data.values;
       }
-      const updatedState = {...state, draftTabs: oldData};
-      return updatedState;
+      console.log("after", oldData);
+      //
+      return {...state, draftTabs: oldData};
     }
     case actions.rename: {
       const { data } = action;
       const id = parseInt(data.id, 10);
       let oldData = state.draftTabs;
       if (oldData[state.name] && oldData[state.name][id]) {
-        //console.log(id, oldData[state.name][id], (oldData[state.name][id])[title]);
         oldData[state.name][id].title = data.title;
       }
-      console.log(oldData);
-      const updatedState = {...state, draftTabs: oldData};
-      console.log('upd', updatedState);
-      return updatedState;//updatedState;
+      return {...state, draftTabs: oldData};
     }
     default:
       throw new Error(`Undefined action type '${action.type}'`);

@@ -148,7 +148,6 @@ const _apiProps = {
   open: function (tabObj = missingParamEr('open')) {
     const newTabObj = this.optionsManager.validateTabData(tabObj);
     const result = this._getFlushEffectsPromise();
-    console.log(newTabObj)
     //
     this._addTab(newTabObj);
     this._open(newTabObj.id);
@@ -198,7 +197,6 @@ const _apiProps = {
 };
 Helper.setNoneEnumProps(_apiProps, {
   onChange: function ({newState, oldState, closedTabIDs, openedTabIDs, isSwitched}) {
-    console.log("changed");
     if (isSwitched || openedTabIDs.length || closedTabIDs.length) {
       this.trigger('onChange', this.userProxy, () => {
         return [

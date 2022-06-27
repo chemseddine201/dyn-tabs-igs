@@ -1,6 +1,6 @@
 {
-  "name": "@chemstech/dyn-tabs-ig",
-  "version": "1.0.4",
+  "name": "@chemstech/dynamic-draggable-tabs-igs",
+  "version": "1.0.7",
   "private": false,
   "author": "dev-javascript <javascript.code.dev@gmail.com>",
   "description": "React dynamic tabs for igs system",
@@ -65,6 +65,7 @@
     "eslint-config-prettier": "^8.3.0",
     "eslint-plugin-prettier": "^3.4.0",
     "eslint-plugin-react": "^7.24.0",
+    "eslint-plugin-storybook": "^0.5.13",
     "gh-pages": "^3.2.3",
     "jest": "^26.6.3",
     "jest-extended": "^0.11.5",
@@ -118,7 +119,8 @@
   "dependencies": {
     "prop-types": "^15.7.2",
     "react-sortablejs": "^6.1.4",
-    "sortablejs": "^1.15.0"
+    "sortablejs": "^1.15.0",
+    "storybook": "^6.5.9"
   },
   "repository": {
     "type": "git",

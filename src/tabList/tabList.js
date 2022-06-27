@@ -13,9 +13,6 @@ const TabList = memo(
       api = React.useContext(ApiContext),
       tablistProps = tablistPropsManager({api}),
       hasNewTab = (((typeof (api.getOption('newTab').panelComponent)) !== 'undefined') && ((typeof api.getOption('newTab')) !== 'undefined'));
-      //console.log({openTabIDs, selectedTabID, trashedTabs})
-      //const st = useSelector(state => state.tablist);
-      //
       useEffect(() => {
         if (api && api.getOption('sortable')) {
           var el = document.getElementById('dyn-tabs-sortable');
@@ -60,6 +57,17 @@ const TabList = memo(
             <div className="rc-dyn-tabs-title add-btn">
               <div className="plus"></div>
             </div>
+          </li>
+          <li onClick={(e) => {
+            api.save({
+              id: `${api.getOption('selectedTabID')}`,
+              name: 'testname',
+              values: {
+                title: 'New Tab',
+                content: 'just a content',
+              },
+            })
+          }}>SAVE ME
           </li>
           </>) : null
         }

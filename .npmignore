@@ -1,8 +1,8 @@
 #ide
 /.vscode
 /.history
-
-
+/.storybook
+/src/stories/*
 # dependencies
 /node_modules
 /.pnp
@@ -13,6 +13,8 @@
 webpack*
 rollup*
 .babelrc.js
+*.stories.js
+*.stories.jsx
 
 #development
 /build
