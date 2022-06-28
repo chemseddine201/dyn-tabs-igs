@@ -6,6 +6,8 @@ import helper from '../utils/helper.js';
 import Tab from '../tab/tab.js';
 import tablistPropsManager from './tablistPropsManager.js';
 
+const MAX_SUPPORTED_LENGTH = 25;
+
 const TabList = memo(
   function TabList(props) {
     const state = React.useContext(StateContext),
@@ -74,7 +76,7 @@ const TabList = memo(
         openTabIDs.map((id) => (<Tab key={id} id={id} selectedTabID={selectedTabID} />))
         }
         {
-          ((openTabIDs.length < api.getOption('maxTabsLength')) && hasNewTab) ? 
+          (((openTabIDs.length < api.getOption('maxTabsLength')) && (openTabIDs.length < MAX_SUPPORTED_LENGTH)) && hasNewTab) ? 
           (
           <li 
             tab-id="99999"
