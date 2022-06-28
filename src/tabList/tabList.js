@@ -20,7 +20,6 @@ const TabList = memo(
           const name = api.getOption('name');
           //
           var sortable = Sortable.create(el, {
-            handle: ".rc-dyn-tabs-tab[role='tab']",
             draggable: ".rc-dyn-tabs-tab[role='tab']",
             filter: ".igored-tab",
             //group: `${sk}-orders`,
