@@ -6,5 +6,6 @@ const actions = {
   active: 'active',
   refresh: 'refresh',
   sort: 'sort',
+  reorder: 'reorder'
 };
 export default actions;

@@ -189,6 +189,11 @@ const _apiProps = {
     this._save(data);
     return result;
   },
+  reorder: function (tabsOrders) {
+    const result = this._getFlushEffectsPromise();
+    this._reorder(tabsOrders);
+    return result;
+  },
   rename: function (data) {
     const result = this._getFlushEffectsPromise();
     this._rename(data);

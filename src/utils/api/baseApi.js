@@ -38,6 +38,10 @@ Object.assign(BaseApi.prototype, {
     this._dispatch({type: actions.save, data});
     this.__flushEffects();
   },
+  _reorder: function (tabsOrders) {
+    this._dispatch({type: actions.reorder, tabsOrders});
+    this.__flushEffects();
+  },
   _rename: function (data) {
     let tabData = this.getTab(data.tabId);
     tabData.title = `${data.name}`;

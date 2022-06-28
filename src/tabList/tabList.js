@@ -18,10 +18,12 @@ const TabList = memo(
           var el = document.getElementById('dyn-tabs-sortable');
           const sk = api.getOption('storageKey');
           const name = api.getOption('name');
+          //
           var sortable = Sortable.create(el, {
             handle: ".rc-dyn-tabs-tab[role='tab']",
-            ...api.getOption('sortable'),
-            group: `${sk}-orders`,
+            draggable: ".rc-dyn-tabs-tab[role='tab']",
+            filter: ".igored-tab",
+            //group: `${sk}-orders`,
             store: {
               get: function (sortable) {
                 var tabsOrders = [];
@@ -29,7 +31,7 @@ const TabList = memo(
                 if (ls) {
                   var savedData = JSON.parse(ls);
                   if (savedData[name]) {
-                    tabsOrders = savedData[name].tabsOrders
+                    tabsOrders = savedData[name].tabsOrders;
                     return tabsOrders ? tabsOrders.split(',') : [];
                   }
                 }
@@ -42,9 +44,12 @@ const TabList = memo(
                   var savedData = JSON.parse(ls);
                   savedData[name].tabsOrders = tabsOrders.join(',');
                   localStorage.setItem(sk, JSON.stringify(savedData));
+                  //save tabs orders on state
+                  api.reorder(tabsOrders.join(','));
                 }
               }
-            }
+            },
+            ...api.getOption('sortable'),
           });
         }
       }, []);
@@ -62,7 +67,7 @@ const TabList = memo(
           ) ? 
           (<>
           <li 
-            className="rc-dyn-tabs-tab cursor-pointer"
+            className="rc-dyn-tabs-tab cursor-pointer igored-tab"
             onClick={() => {
               let newId = helper.generateId(openTabIDs, api.getOption('maxTabsLength'));
               let newTab = api.getOption('newTab');

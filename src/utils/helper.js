@@ -9,7 +9,8 @@ const helper = {
       selectedTabID: state.selectedTabID,
       openTabIDs: (state.openTabIDs || []).slice(),
       draftTabs: (state.draftTabs || {}),
-      name: `${state.name}`
+      name: `${state.name}`,
+      tabsOrders: (state.tabsOrders || []).slice()
     };
   },
   assingAll: function (targetObj, ...sourcObjs) {
@@ -85,6 +86,16 @@ const helper = {
     if (ls) {
       const savedTabs = JSON.parse(ls)[name];
       if (savedTabs) return savedTabs.selectedTabID
+    }
+    return '';
+  },
+  getSavedTabsOrders: (storageKey, name) => {
+    const ls = localStorage.getItem(storageKey);
+    if (ls) {
+      const savedTabs = JSON.parse(ls)[name];
+      if (savedTabs) {
+        return ((typeof savedTabs.tabsOrders) == 'string') ? savedTabs.tabsOrders : '';
+      } 
     }
     return '';
   }

@@ -30,6 +30,7 @@ Object.assign(DefaultOptions.prototype, {
       onInit: function () {},
       onSave: function () {},
       onTabRename: function () {},
+      onReorder: function () {},
       accessibility: true,
       isVertical: false,
       defaultPanelComponent: function defaultPanelComponent() {

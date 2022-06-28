@@ -1,6 +1,6 @@
 import React, { cloneElement } from 'react';
 import Helper from '../../helper.js';
-const {throwMissingParam: missingParamEr, getSavedTabs, getSelectedTab} = Helper;
+const {throwMissingParam: missingParamEr, getSavedTabs, getSelectedTab, getSavedTabsOrders} = Helper;
 
 function OptionManager(getDeps, {options}) {
   const {globalDefaultOptions} = getDeps();
@@ -12,6 +12,7 @@ function OptionManager(getDeps, {options}) {
   this.initialTabs = [];
   this.storageKey = this.options.storageKey || 'igs-dynamic-tabs';
   this.name = this.options.name || '';
+  this.tabsOrders = "";
   this._setSetting()._setInitialData();
 }
 
@@ -73,7 +74,7 @@ Object.assign(OptionManager.prototype, {
   },
   _setInitialData: function () {
     // set this.initialTabs and this.initialState
-    const {selectedTabID, tabs, name} = this.options,
+    const {selectedTabID, tabs, name, defaultName} = this.options,
       DefaultPanelComponent =  this.options.newTab?.panelComponent || this._defaultOptions.newTab?.panelComponent,
       draftTabs = getSavedTabs(this.storageKey, name);
       var openTabIDs = [];
@@ -82,7 +83,7 @@ Object.assign(OptionManager.prototype, {
     if (this.validateObjectiveTabData(draftTabs) && Object.keys(draftTabs).length) {
       Object.values(draftTabs).forEach((tab, index) => {
         const id = tab.tabId || (index+1 + '');
-        const title = (tab.tabTitle ? `${tab.tabTitle}` : `New ${name}`);
+        const title = (tab.tabTitle ? `${tab.tabTitle}` : `${defaultName}`);
         const newTab = {
           id: id,
           title: title,
@@ -105,7 +106,8 @@ Object.assign(OptionManager.prototype, {
       selectedTabID: this._generateSelectedId(openTabIDs, selectedTabID), //make sure it is type of string
       openTabIDs: openTabIDs,
       draftTabs: draftTabs,
-      name: name
+      name: name,
+      tabsOrders: getSavedTabsOrders(this.storageKey, name),
     };
     return this;
   },

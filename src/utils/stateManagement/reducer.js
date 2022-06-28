@@ -51,12 +51,16 @@ export default function reducer(state, action) {
       const { data } = action;
       if(!data || !data.id) return state;
       const id = parseInt(data.id, 10);
+      let { values } = data;
       let oldData = state.draftTabs;
-      if(oldData){
-        oldData[id] = data.values;
+      if (oldData) {
+        oldData[id] = {
+          ...oldData[id],
+          values
+        };
       } else {
         oldData = {};
-        oldData[id] = data.values;
+        oldData[id] = values;
       }
       //
       return {...state, draftTabs: oldData};
@@ -70,6 +74,11 @@ export default function reducer(state, action) {
       }
       return {...state, draftTabs: oldData};
     }
+    case actions.reorder: {
+      const { tabsOrders } = action;
+      return {...state, tabsOrders: tabsOrders};
+    }
+
     default:
       throw new Error(`Undefined action type '${action.type}'`);
   }
