@@ -3,18 +3,24 @@ import helper from '../helper';
 export default function reducer(state, action) {
   switch (action.type) {
     case actions.close: {
-      const {openTabIDs: arr, draftTabs} = state,
+      var newTabsOrders = "";
+      const {openTabIDs: arr, draftTabs, tabsOrders} = state,
       removedItemIndex = arr.indexOf(action.tabId);
       if (removedItemIndex >= 0) {
         //remove id
         const newArr = arr.slice();
         newArr.splice(removedItemIndex, 1);
         //remove tab if saved
-        if (draftTabs && draftTabs[action.tabId]){
+        if (draftTabs && draftTabs[action.tabId]) {
           delete draftTabs[action.tabId];
         }
+        if (tabsOrders && tabsOrders.length) {
+          let arr = tabsOrders.split(',');
+          arr = arr.filter(ele => ele !== action.tabId);
+          newTabsOrders = arr.join(',');
+        }
         //return updated state state
-        return {...state, openTabIDs: newArr, draftTabs};
+        return {...state, openTabIDs: newArr, draftTabs, tabsOrders: newTabsOrders};
       }
       return state;
     }
@@ -56,7 +62,7 @@ export default function reducer(state, action) {
       if (oldData) {
         oldData[id] = {
           ...oldData[id],
-          values
+          ...values
         };
       } else {
         oldData = {};

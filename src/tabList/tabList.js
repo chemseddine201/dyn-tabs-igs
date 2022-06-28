@@ -12,6 +12,7 @@ const TabList = memo(
     {openTabIDs, selectedTabID} = state,
       api = React.useContext(ApiContext),
       tablistProps = tablistPropsManager({api}),
+      sortableOptions = api.getOption('sortableOptions'),
       hasNewTab = (((typeof (api.getOption('newTab').panelComponent)) !== 'undefined') && ((typeof api.getOption('newTab')) !== 'undefined'));
       useEffect(() => {
         if (api && api.getOption('sortable')) {
@@ -20,9 +21,16 @@ const TabList = memo(
           const name = api.getOption('name');
           //
           var sortable = Sortable.create(el, {
-            draggable: ".rc-dyn-tabs-tab[role='tab']",
-            filter: ".igored-tab",
-            //group: `${sk}-orders`,
+            draggable: ".rc-dyn-tabs-tab",
+            dataIdAttr: 'tab-id',
+            group: `${sk}`,
+            filter: ".exclude",
+            onMove: function(evt) {
+              if (sortableOptions && ((typeof sortableOptions.onMove) == 'function')) {
+                sortableOptions.onMove(evt);
+              }
+              return evt.related.className.indexOf('exclude') === -1; //and this
+            },
             store: {
               get: function (sortable) {
                 var tabsOrders = [];
@@ -38,6 +46,13 @@ const TabList = memo(
               },
               set: function (sortable) {
                 var tabsOrders = sortable.toArray();
+                //change add button to last tab
+                if(tabsOrders.indexOf("99999") != -1) {
+                  tabsOrders.push(tabsOrders.splice(tabsOrders.indexOf("99999"), 1)[0]);
+                } else {
+                  tabsOrders.push("99999");
+                }
+                //get local storage
                 var ls = localStorage.getItem(sk);
                 if (ls) {
                   var savedData = JSON.parse(ls);
@@ -48,7 +63,7 @@ const TabList = memo(
                 }
               }
             },
-            ...api.getOption('sortable'),
+            ...sortableOptions,
           });
         }
       }, []);
@@ -56,17 +71,14 @@ const TabList = memo(
     return (
       <ul id="dyn-tabs-sortable" {...tablistProps}>
         {
-        openTabIDs.map((id) => (
-            <Tab key={id} id={id} selectedTabID={selectedTabID} />
-        ))
+        openTabIDs.map((id) => (<Tab key={id} id={id} selectedTabID={selectedTabID} />))
         }
         {
+          ((openTabIDs.length < api.getOption('maxTabsLength')) && hasNewTab) ? 
           (
-          (openTabIDs.length < api.getOption('maxTabsLength')) && hasNewTab
-          ) ? 
-          (<>
           <li 
-            className="rc-dyn-tabs-tab cursor-pointer igored-tab"
+            tab-id="99999"
+            className="rc-dyn-tabs-tab cursor-pointer exclude"
             onClick={() => {
               let newId = helper.generateId(openTabIDs, api.getOption('maxTabsLength'));
               let newTab = api.getOption('newTab');
@@ -88,7 +100,7 @@ const TabList = memo(
               <div className="plus"></div>
             </div>
           </li>
-          </>) : null
+        ) : null
         }
       </ul>
     );
