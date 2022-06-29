@@ -38,16 +38,21 @@ Object.assign(BaseApi.prototype, {
     this._dispatch({type: actions.save, data});
     this.__flushEffects();
   },
+  _remove: function (tabId) {
+    this._dispatch({type: actions.remove, tabId});
+    this.__flushEffects();
+  },
   _reorder: function (tabsOrders) {
     this._dispatch({type: actions.reorder, tabsOrders});
     this.__flushEffects();
   },
   _rename: function (data) {
-    let tabData = this.getTab(data.tabId);
-    tabData.title = `${data.name}`;
+    const {name, tabId} = data;
+    let tabData = this.getTab(tabId);
+    tabData.title = `${namename}`;
     this._dispatch({type: actions.rename, data: {
-      id: data.tabId,
-      title: data.name
+      id: tabId,
+      title: name
     }});
     this.__flushEffects();
   },

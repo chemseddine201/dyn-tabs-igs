@@ -71,6 +71,18 @@ export default function reducer(state, action) {
       //
       return {...state, draftTabs: oldData};
     }
+    case actions.remove: {
+      const { tabId } = action;
+      if (draftTabs && draftTabs[tabId]) {
+        delete draftTabs[tabId];
+      }
+      if (tabsOrders && tabsOrders.length) {
+        let arr = tabsOrders.split(',');
+        arr = arr.filter(ele => ele !== tabId);
+        newTabsOrders = arr.join(',');
+      }
+      return {...state, openTabIDs: newArr, draftTabs, tabsOrders: newTabsOrders};
+    }
     case actions.rename: {
       const { data } = action;
       const id = parseInt(data.id, 10);

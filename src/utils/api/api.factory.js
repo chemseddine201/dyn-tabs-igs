@@ -189,6 +189,11 @@ const _apiProps = {
     this._save(data);
     return result;
   },
+  remove: function (tabId) {
+    const result = this._getFlushEffectsPromise();
+    this._remove(tabId);
+    return result;
+  },
   reorder: function (tabsOrders) {
     const result = this._getFlushEffectsPromise();
     this._reorder(tabsOrders);

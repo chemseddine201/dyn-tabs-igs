@@ -6,6 +6,7 @@ const actions = {
   active: 'active',
   refresh: 'refresh',
   sort: 'sort',
-  reorder: 'reorder'
+  reorder: 'reorder',
+  remove: 'remove'
 };
 export default actions;
