@@ -49,7 +49,7 @@ Object.assign(BaseApi.prototype, {
   _rename: function (data) {
     const {name, tabId} = data;
     let tabData = this.getTab(tabId);
-    tabData.title = `${namename}`;
+    tabData.title = `${name}`;
     this._dispatch({type: actions.rename, data: {
       id: tabId,
       title: name
