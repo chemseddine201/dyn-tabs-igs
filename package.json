@@ -1,6 +1,10 @@
 {
   "name": "@chemstech/dynamic-draggable-tabs-igs",
+<<<<<<< HEAD
   "version": "1.2.22",
+=======
+  "version": "1.2.13",
+>>>>>>> d0386ec7868eb012409d6a64771d0048f9fc8fd3
   "private": false,
   "author": "dev-javascript updated by Lotec-dev.com",
   "description": "React dynamic draggable tabs for igs system",
