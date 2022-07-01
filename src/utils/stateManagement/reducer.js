@@ -60,7 +60,7 @@ export default function reducer(state, action) {
       const id = parseInt(data.id, 10);
       let { values } = data;
       let oldData = state.draftTabs;
-      values.lsExpiry = new Date().getTime() + state.lsMaxLifeTime;
+      values.lsExpiry = new Date().getTime()+state.lsMaxLifeTime;
       if (oldData && helper.isObj(oldData)) {
         oldData[id] = {
           ...oldData[id],

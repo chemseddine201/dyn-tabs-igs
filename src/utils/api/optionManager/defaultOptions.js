@@ -15,7 +15,7 @@ Object.assign(DefaultOptions.prototype, {
       storageKey: undefined,
       tabs: [],
       selectedTabID: '',
-      lsMaxLifeTime: new Date().getTime() + (1000 * 60 * 60 * 24 * 30),//default 30 days
+      lsMaxLifeTime: (1000*60*60*24*30),//default 30 days
       beforeSelect: function () {
         return true;
       },

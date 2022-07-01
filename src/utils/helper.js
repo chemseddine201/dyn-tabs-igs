@@ -66,12 +66,12 @@ const helper = {
   isObj: (obj) => Object.prototype.toString.call(obj) === '[object Object]',
   isArray: (arr) => typeof arr === 'object' && arr.constructor === Array,
   unsetExpiryElements: (obj = {}, time = Date.now().getTime()) => {
-    //Object.values(obj).filter(e => e.lsExpiry > time)
-    Object.keys(obj).forEach((key) => {
-      if (obj[key] && obj[key].lsExpiry && obj[key].lsExpiry > time) {
+    Object.values(obj).filter(e => e.lsExpiry > time)
+   /* Object.keys(obj).forEach((key) => {
+      if (obj[key] && obj[key].lsExpiry && obj[key].lsExpiry < time) {
         delete obj[key];
       }
-    });
+    });*/
     return obj;
   },
   generateId : (tablist, maxNum) => {
@@ -91,7 +91,7 @@ const helper = {
       if (helper.isObj(savedTabs)) {
         let draftTabs = savedTabs.draftTabs;
         if (draftTabs && helper.isObj(draftTabs)) {
-          draftTabs = unsetExpiryElements(draftTabs, nowTime);
+          draftTabs = helper.unsetExpiryElements(draftTabs, nowTime);
         }
         return draftTabs
       }
