@@ -1,3 +1,4 @@
+const defaultExpiry = new Date(new Date().getTime() + (1000 * 60 * 60 * 24 * 30));
 const DefaultOptions = function (DefaulTabInnerComponent = null) {
   this.defaultDirection = 'ltr';
   this._DefaulTabInnerComponent = DefaulTabInnerComponent;
@@ -14,6 +15,7 @@ Object.assign(DefaultOptions.prototype, {
       storageKey: undefined,
       tabs: [],
       selectedTabID: '',
+      lsMaxLifeTime: new Date().getTime() + (1000 * 60 * 60 * 24 * 30),//default 30 days
       beforeSelect: function () {
         return true;
       },

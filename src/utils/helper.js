@@ -10,7 +10,8 @@ const helper = {
       openTabIDs: (state.openTabIDs || []).slice(),
       draftTabs: (state.draftTabs || {}),
       name: `${state.name}`,
-      tabsOrders: (state.tabsOrders || []).slice()
+      tabsOrders: (state.tabsOrders || []).slice(),
+      lsMaxLifeTime: state.lsMaxLifeTime,
     };
   },
   assingAll: function (targetObj, ...sourcObjs) {
@@ -64,6 +65,15 @@ const helper = {
   },
   isObj: (obj) => Object.prototype.toString.call(obj) === '[object Object]',
   isArray: (arr) => typeof arr === 'object' && arr.constructor === Array,
+  unsetExpiryElements: (obj = {}, time = Date.now().getTime()) => {
+    //Object.values(obj).filter(e => e.lsExpiry > time)
+    Object.keys(obj).forEach((key) => {
+      if (obj[key] && obj[key].lsExpiry && obj[key].lsExpiry > time) {
+        delete obj[key];
+      }
+    });
+    return obj;
+  },
   generateId : (tablist, maxNum) => {
     let missing = [];
     for (var i = 1; i <= maxNum; i++) {
@@ -74,10 +84,17 @@ const helper = {
     return missing[0];
    },
    getSavedTabs: (storageKey, name) => {
+    const nowTime = new Date().getTime();
     const ls = localStorage.getItem(storageKey);
     if (ls) {
       const savedTabs = JSON.parse(ls)[name];
-      if (savedTabs) return savedTabs.draftTabs
+      if (helper.isObj(savedTabs)) {
+        let draftTabs = savedTabs.draftTabs;
+        if (draftTabs && helper.isObj(draftTabs)) {
+          draftTabs = unsetExpiryElements(draftTabs, nowTime);
+        }
+        return draftTabs
+      }
     }
     return {};
   },
@@ -85,7 +102,7 @@ const helper = {
     const ls = localStorage.getItem(storageKey);
     if (ls) {
       const savedTabs = JSON.parse(ls)[name];
-      if (savedTabs) return savedTabs.selectedTabID
+      if (helper.isObj(savedTabs)) return savedTabs.selectedTabID;
     }
     return '';
   },
@@ -93,7 +110,7 @@ const helper = {
     const ls = localStorage.getItem(storageKey);
     if (ls) {
       const savedTabs = JSON.parse(ls)[name];
-      if (savedTabs) {
+      if (helper.isObj(savedTabs)) {
         return ((typeof savedTabs.tabsOrders) == 'string') ? savedTabs.tabsOrders : '';
       } 
     }

@@ -1,5 +1,6 @@
 import actions from './actions.js';
 import helper from '../helper';
+
 export default function reducer(state, action) {
   switch (action.type) {
     case actions.close: {
@@ -59,7 +60,8 @@ export default function reducer(state, action) {
       const id = parseInt(data.id, 10);
       let { values } = data;
       let oldData = state.draftTabs;
-      if (oldData) {
+      values.lsExpiry = new Date().getTime() + state.lsMaxLifeTime;
+      if (oldData && helper.isObj(oldData)) {
         oldData[id] = {
           ...oldData[id],
           ...values
@@ -73,6 +75,7 @@ export default function reducer(state, action) {
     }
     case actions.remove: {
       const { tabId } = action;
+      const { draftTabs, tabsOrders} = state;
       if (draftTabs && draftTabs[tabId]) {
         delete draftTabs[tabId];
       }

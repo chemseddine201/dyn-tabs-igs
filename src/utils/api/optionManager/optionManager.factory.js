@@ -108,6 +108,7 @@ Object.assign(OptionManager.prototype, {
       draftTabs: draftTabs,
       name: name,
       tabsOrders: getSavedTabsOrders(this.storageKey, name),
+      lsMaxLifeTime: this.options.lsMaxLifeTime || this._defaultOptions.lsMaxLifeTime,
     };
     return this;
   },
