@@ -65,14 +65,14 @@ const helper = {
   },
   isObj: (obj) => Object.prototype.toString.call(obj) === '[object Object]',
   isArray: (arr) => typeof arr === 'object' && arr.constructor === Array,
-  unsetExpiryElements: (obj = {}, time = Date.now().getTime()) => {
-    Object.values(obj).filter(e => e.lsExpiry > time)
-   /* Object.keys(obj).forEach((key) => {
+  unsetExpiryElements: (obj = {}, time = Date.now().getTime()) => { 
+    Object.keys(obj).forEach((key) => {
       if (obj[key] && obj[key].lsExpiry && obj[key].lsExpiry < time) {
         delete obj[key];
       }
-    });*/
+    });
     return obj;
+    //return Object.values(obj).filter(e => e.lsExpiry > time);
   },
   generateId : (tablist, maxNum) => {
     let missing = [];
