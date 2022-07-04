@@ -1,4 +1,5 @@
 import React, {useState, useReducer, useLayoutEffect, useRef} from 'react';
+import helper from '../utils/helper';
 function useDynamicTabs(getDeps, options = {}) {
   const {reducer, getApiInstance, PanelList, TabList, ApiContext, StateContext, ForceUpdateContext} = getDeps();
   const ref = useRef(null);
@@ -14,9 +15,18 @@ function useDynamicTabs(getDeps, options = {}) {
   useLayoutEffect(() => {
     const key = (api.optionsManager.options.storageKey?.length ? api.optionsManager.options.storageKey : 'igs-dynamic-tabs');	
     if (api.optionsManager.options.useStorage && true) {
-      localStorage.setItem(`${key}`, JSON.stringify({
-        [api.optionsManager.options.name]: state
-      }));
+      const name = api.optionsManager.options.name;
+      let ls = localStorage.getItem(key);
+      let upState = {
+        [name]: state
+      };
+      if (ls) {
+        let storageState = JSON.parse(ls);
+        if (storageState && (helper.isObj(storageState) || helper.isArray(storageState))) {
+          upState = {...storageState, ...upState};
+        }
+      }
+      localStorage.setItem(`${key}`, JSON.stringify(upState));
     } else {
       localStorage.removeItem(`${key}`);
     }
