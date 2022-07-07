@@ -75,6 +75,9 @@ const helper = {
     //return Object.values(obj).filter(e => e.lsExpiry > time);
   },
   generateId : (tablist, maxNum) => {
+    if (tablist && tablist.length < maxNum-1)  {
+      return parseInt(tablist.at(-1))+1+'';
+    }
     let missing = [];
     for (var i = 1; i <= maxNum; i++) {
       if (tablist.indexOf(i+'') == -1) {
