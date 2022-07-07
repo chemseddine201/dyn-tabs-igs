@@ -82,7 +82,7 @@ Object.assign(OptionManager.prototype, {
     let savedTabs = [];
     if (this.validateObjectiveTabData(draftTabs) && Object.keys(draftTabs).length) {
       Object.values(draftTabs).forEach((tab, index) => {
-        const id = tab.tabId || (index+1 + '');
+        const id = tab.tabId || Object.keys(draftTabs).find(key => draftTabs[key] === tab);
         const title = (tab.tabTitle ? `${tab.tabTitle}` : `${defaultName}`);
         const newTab = {
           id: id,

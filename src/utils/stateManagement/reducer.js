@@ -90,9 +90,13 @@ export default function reducer(state, action) {
       const { data } = action;
       const id = parseInt(data.id, 10);
       let oldData = state.draftTabs ? state.draftTabs : {};
-      oldData[id] = {
-        tabTitle: data.title
-      };
+      if(oldData && oldData[id]) {
+        oldData[id].tabTitle = data.title;
+      } else {
+        oldData[id] = {
+          tabTitle: data.title
+        };
+      }
       return {...state, draftTabs: oldData};
     }
     case actions.reorder: {
