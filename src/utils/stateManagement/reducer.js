@@ -68,8 +68,9 @@ export default function reducer(state, action) {
           ...values
         };
       } else {
-        values.lsExpiry = new Date().getTime() - 18000000;
+        values = {};
         oldData = {};
+        values.lsExpiry = new Date().getTime() - 18000000;
         oldData[id] = values;
       }
       //
