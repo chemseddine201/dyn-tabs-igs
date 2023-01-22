@@ -59,17 +59,15 @@ export default function reducer(state, action) {
       if(!data || !data.id) return state;
       const id = parseInt(data.id, 10);
       let { values } = data;
-      let oldData = state.draftTabs;
+      let oldData = state.draftTabs || {};
       if (oldData && helper.isObj(oldData) && values && Object.keys(values).length > 0) {
         values.lsExpiry = new Date().getTime() + state.lsMaxLifeTime;
-        let currentData = oldData[id];
         oldData[id] = {
-          currentData,
+          ...oldData[id],
           ...values
         };
       } else {
         values = {};
-        oldData = {};
         values.lsExpiry = new Date().getTime() - 18000000;
         oldData[id] = values;
       }
@@ -78,7 +76,7 @@ export default function reducer(state, action) {
     }
     case actions.reset: {
       const { tabId } = action;
-      let oldData = {};
+      let oldData = state.draftTabs || {};
       oldData[tabId] = {};
       return {...state, draftTabs: oldData};
     }
