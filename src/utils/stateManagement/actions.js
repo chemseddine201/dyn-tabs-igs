@@ -1,5 +1,6 @@
 const actions = {
   save: 'save',
+  reset: 'reset',
   rename: 'rename',
   open: 'open',
   close: 'close',

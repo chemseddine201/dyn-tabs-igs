@@ -41,10 +41,14 @@ const TabComponent = function TabComponent(props) {
       }
     }}
     onKeyDown={(e)=> {
-      var key = e.which || e.keyCode || e.charCode;
-      if(key == 13 || key == 46 || e.target.innerText.length > 20) {
+      try {
+        var key = e.which || e.keyCode || e.charCode;
+        if(key == 13 || key == 46 || e.target.innerText.length > 20) {
+          e.preventDefault();
+          return;
+        }
+      } catch (error) {
         e.preventDefault();
-        return;
       }
     }}
   >

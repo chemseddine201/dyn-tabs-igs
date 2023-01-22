@@ -61,7 +61,7 @@ function useDynamicTabs(getDeps, options = {}) {
         <ApiContext.Provider value={api}>
           <StateContext.Provider value={api.stateRef}>
             <ForceUpdateContext.Provider value={api.forceUpdateState}>
-              <TabList {...props}>props.children</TabList>
+              <TabList {...props}>{props.children}</TabList>
             </ForceUpdateContext.Provider>
           </StateContext.Provider>
         </ApiContext.Provider>
@@ -73,7 +73,7 @@ function useDynamicTabs(getDeps, options = {}) {
         <ApiContext.Provider value={api}>
           <StateContext.Provider value={api.stateRef}>
             <ForceUpdateContext.Provider value={api.forceUpdateState}>
-              <PanelList {...props}>props.children</PanelList>
+              <PanelList {...props}>{props.children}</PanelList>
             </ForceUpdateContext.Provider>
           </StateContext.Provider>
         </ApiContext.Provider>

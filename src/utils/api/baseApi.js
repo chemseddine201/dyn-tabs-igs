@@ -38,6 +38,10 @@ Object.assign(BaseApi.prototype, {
     this._dispatch({type: actions.save, data});
     this.__flushEffects();
   },
+  _reset: function (tabId) {
+    this._dispatch({type: actions.reset, tabId});
+    this.__flushEffects();
+  },
   _remove: function (tabId) {
     this._dispatch({type: actions.remove, tabId});
     this.__flushEffects();

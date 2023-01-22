@@ -1,6 +1,6 @@
 {
   "name": "@chemstech/dynamic-draggable-tabs-igs",
-  "version": "0.0.12",
+  "version": "0.0.13",
   "private": false,
   "author": "dev-javascript updated by Lotec-dev.com",
   "description": "React dynamic draggable tabs for igs system",
@@ -22,7 +22,7 @@
     "test": "jest",
     "lint": "eslint src",
     "deploy": "gh-pages -d demo",
-    "dopublish": "yarn prepublish && npm publish --access public"
+    "dopublish": "yarn prepublish && npm publish"
   },
   "peerDependencies": {
     "@babel/runtime-corejs3": "^7.18.3",

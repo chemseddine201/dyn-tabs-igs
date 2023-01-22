@@ -189,6 +189,11 @@ const _apiProps = {
     this._save(data);
     return result;
   },
+  reset: function (tabId) {
+    const result = this._getFlushEffectsPromise();
+    this._reset(tabId);
+    return result;
+  },
   remove: function (tabId) {
     const result = this._getFlushEffectsPromise();
     this._remove(tabId);

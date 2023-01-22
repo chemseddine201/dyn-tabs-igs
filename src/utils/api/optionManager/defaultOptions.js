@@ -31,6 +31,7 @@ Object.assign(DefaultOptions.prototype, {
       onDestroy: function () {},
       onInit: function () {},
       onSave: function () {},
+      onReset: function () {},
       onRemove: function () {},
       onRename: function () {},
       onReorder: function () {},

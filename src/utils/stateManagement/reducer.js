@@ -1,4 +1,4 @@
-import actions from './actions.js';
+import actions from './actions';
 import helper from '../helper';
 
 export default function reducer(state, action) {
@@ -60,17 +60,25 @@ export default function reducer(state, action) {
       const id = parseInt(data.id, 10);
       let { values } = data;
       let oldData = state.draftTabs;
-      values.lsExpiry = new Date().getTime()+state.lsMaxLifeTime;
-      if (oldData && helper.isObj(oldData)) {
+      if (oldData && helper.isObj(oldData) && values && Object.keys(values).length > 0) {
+        values.lsExpiry = new Date().getTime() + state.lsMaxLifeTime;
+        let currentData = oldData[id];
         oldData[id] = {
-          ...oldData[id],
+          currentData,
           ...values
         };
       } else {
+        values.lsExpiry = new Date().getTime() - 18000000;
         oldData = {};
         oldData[id] = values;
       }
       //
+      return {...state, draftTabs: oldData};
+    }
+    case actions.reset: {
+      const { tabId } = action;
+      let oldData = {};
+      oldData[tabId] = {};
       return {...state, draftTabs: oldData};
     }
     case actions.remove: {

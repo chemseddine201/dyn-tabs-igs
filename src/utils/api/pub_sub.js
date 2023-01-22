@@ -12,6 +12,7 @@ const Pub_Sub = function () {
     _onReady: [],
     onFirstSelect: [],
     onSave: [],
+    onReset: [],
     onRemove: [], 
     onRename: [],
     onReorder: []
