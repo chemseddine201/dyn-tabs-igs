@@ -167,20 +167,11 @@ const _apiProps = {
     this._removeTab(id);
     return result;
   },
-  close: function (id = missingParamEr('close'), switching = true, resetFirst = true) {
+  close: function (id = missingParamEr('close'), prompt = true, switching = true) {
     if (this.stateRef?.openTabIDs?.length === 1) {//&& resetFirst
-      /* const status = confirm('Are you sure to reset this tab?');
-      if (status) {
-        const result = this._getFlushEffectsPromise();
-        this._save({
-          id: id+'',
-          values: {}
-        });
-        return result;
-      } */
       return;
     }
-    const status = confirm('Are you sure to close this tab?');
+    const status = prompt ? confirm('Are you sure to close this tab?') : true;
     if (status && true) {
       if (id) id = id + ''; //make sure id is string
       if (switching && this.isOpen(id) && this.isSelected(id)) {
