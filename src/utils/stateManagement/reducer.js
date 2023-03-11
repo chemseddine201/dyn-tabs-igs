@@ -4,32 +4,38 @@ import helper from '../helper';
 export default function reducer(state, action) {
   switch (action.type) {
     case actions.close: {
-      var newTabsOrders = "";
-      const {openTabIDs: arr, draftTabs, tabsOrders} = state,
-      removedItemIndex = arr.indexOf(action.tabId);
-      if (removedItemIndex >= 0) {
-        //remove id
-        const newArr = arr.slice();
-        newArr.splice(removedItemIndex, 1);
-        //remove tab if saved
-        if (draftTabs && draftTabs[action.tabId]) {
-          delete draftTabs[action.tabId];
-        }
-        if (tabsOrders && tabsOrders.length) {
-          let arr = tabsOrders.split(',');
-          arr = arr.filter(ele => ele !== action.tabId);
-          newTabsOrders = arr.join(',');
-        }
-        //return updated state state
-        return {...state, openTabIDs: newArr, draftTabs, tabsOrders: newTabsOrders};
+      const {tabId} = action;
+      const {openTabIDs: tabsIds, draftTabs, tabsOrders} = state;
+      if (tabsIds?.length === 1) {//reset only if length is 1
+        let oldData = draftTabs || {};
+        oldData[tabId] = {};
+        return {...state, draftTabs: oldData};
       }
-      return state;
+      //remove tab
+      const newTabsIdsArr = tabsIds;
+      if (draftTabs && draftTabs[tabId]) {
+        delete draftTabs[tabId];
+        newTabsIdsArr = newTabsIdsArr.filter(id => id != tabId);
+      }
+      //
+      let newTabsOrders = tabsOrders;
+      if (tabsOrders && tabsOrders.length) {
+        let arrTabsOrders = tabsOrders?.split(',')?.filter(ele => ele != tabId);
+        newTabsOrders = arrTabsOrders?.join(',');
+      }
+      //return updated state
+      return {
+        ...state, 
+        openTabIDs: newTabsIdsArr, 
+        draftTabs, 
+        tabsOrders: newTabsOrders 
+      };
     }
     case actions.open: {
       const arr = state.openTabIDs,
         tabId = action.tabId;
       if (arr.indexOf(tabId) === -1) {
-        const newArr = arr.slice();
+        let newArr = arr.slice();
         newArr.push(tabId);
         return {...state, openTabIDs: newArr};
       }
@@ -82,9 +88,11 @@ export default function reducer(state, action) {
     }
     case actions.remove: {
       const { tabId } = action;
-      const { draftTabs, tabsOrders} = state;
+      const { draftTabs, tabsOrders, openTabIDs} = state;
+      let newArr = openTabIDs;
       if (draftTabs && draftTabs[tabId]) {
         delete draftTabs[tabId];
+        newArr = openTabIDs.filter(id => tabId !== id);
       }
       if (tabsOrders && tabsOrders.length) {
         let arr = tabsOrders.split(',');
