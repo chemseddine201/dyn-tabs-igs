@@ -28,8 +28,6 @@ export default function (props) {
   const options = {
     tabs: [
       {id: '1', title: 'tab 1', panelComponent: Panel1, iconClass: 'fa fa-home'},
-      {id: '2', title: 'tab 2', lazy: true, panelComponent: Panel2, iconClass: 'fa fa-book'},
-      {id: '3', title: 'lazy tab 3', lazy: true, panelComponent: LazyPanel3},
     ],
     selectedTabID: '1',
     onLoad: function () {

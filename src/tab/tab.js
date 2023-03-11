@@ -1,9 +1,11 @@
 import React, {memo} from 'react';
-import {ApiContext, ForceUpdateContext} from '../utils/context.js';
+import {ApiContext, ForceUpdateContext, StateContext} from '../utils/context.js';
 import TabPropsManager from './tabPropsManager.js';
 import PropTypes from 'prop-types';
 const TabComponent = function TabComponent(props) {
   React.useContext(ForceUpdateContext);
+  const state = React.useContext(StateContext),
+  {openTabIDs} = state;
   const {id, selectedTabID} = props,
     api = React.useContext(ApiContext),
     TabInnerComponent = api.getOption('tabComponent'),
@@ -65,7 +67,7 @@ const TabComponent = function TabComponent(props) {
           <TabInnerComponent {...propsManager.getTabInnerProps()}>
             <TabTitle tabObj={tabObj} />
           </TabInnerComponent>
-          {tabObj.closable ? <span {...propsManager.getCloseIconProps()}>&times;</span> : null}
+          {tabObj.closable && (openTabIDs?.length > 1) ? <span {...propsManager.getCloseIconProps()}>&times;</span> : null}
     </li>
   );
 };

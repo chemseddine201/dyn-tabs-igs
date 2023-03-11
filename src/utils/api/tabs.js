@@ -13,8 +13,10 @@ Object.assign(Tabs.prototype, {
     return this;
   },
   _removeTab: function (id) {
-    const delIndex = this._data.findIndex((tab) => tab.id === id);
-    delIndex >= 0 && this._data.splice(delIndex, 1);
+    const delIndex = this._data.findIndex((tab) => tab.id == id);
+    if(delIndex > 0) {
+      this._data.splice(delIndex, 1);
+    }
     return this;
   },
   getTab: function (id) {

@@ -95,7 +95,7 @@ const TabList = memo(
                 api.select(`${newId}`);
                 api.refresh();
               })
-              .catch(e => alert(e))
+              .catch(e => console.error(e))
             }}
           >
             <div className="rc-dyn-tabs-title add-btn">
