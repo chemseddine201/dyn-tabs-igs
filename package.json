@@ -1,6 +1,6 @@
 {
   "name": "@chemstech/dynamic-draggable-tabs-igs",
-  "version": "0.0.30",
+  "version": "0.0.41",
   "private": false,
   "author": "dev-javascript updated by Lotec-dev.com",
   "description": "React dynamic draggable tabs for igs system",
@@ -118,9 +118,11 @@
     ]
   },
   "dependencies": {
+    "async-json": "^0.0.2",
     "prop-types": "^15.7.2",
     "react-sortablejs": "^6.1.4",
-    "sortablejs": "^1.15.0"
+    "sortablejs": "^1.15.0",
+    "yieldable-json": "^2.0.1"
   },
   "repository": {
     "type": "git",

@@ -1,3 +1,5 @@
+import * as yj from 'yieldable-json';
+
 const helper = {
   checkArrIndex: (index, arrLength) => index >= 0 && index < arrLength,
   getInstance: function (Fn) {
@@ -65,7 +67,7 @@ const helper = {
   },
   isObj: (obj) => Object.prototype.toString.call(obj) === '[object Object]',
   isArray: (arr) => typeof arr === 'object' && arr.constructor === Array,
-  unsetExpiryElements: (obj = {}, time = Date.now().getTime()) => { 
+  unsetExpiryElements: (obj = {}, time = Date.now().getTime()) => {
     Object.keys(obj).forEach((key) => {
       if (obj[key] && obj[key].lsExpiry && obj[key].lsExpiry < time) {
         delete obj[key];
@@ -74,19 +76,19 @@ const helper = {
     return obj;
     //return Object.values(obj).filter(e => e.lsExpiry > time);
   },
-  generateId : (tablist, maxNum) => {
+  generateId: (tablist, maxNum) => {
     /*if (tablist && tablist.length < maxNum-1)  {
       return parseInt(tablist.at(-1))+1+'';
     }*/
     let missing = [];
     for (var i = 1; i <= maxNum; i++) {
-      if (tablist.indexOf(i+'') == -1) {
+      if (tablist.indexOf(i + '') == -1) {
         missing.push(i);
       }
     }
     return missing[0];
-   },
-   getSavedTabs: (storageKey, name) => {
+  },
+  getSavedTabs: (storageKey, name) => {
     const nowTime = new Date().getTime();
     const ls = helper.getObjectFromLocal(storageKey);
     if (ls) {
@@ -115,66 +117,108 @@ const helper = {
       const savedTabs = ls[name];
       if (helper.isObj(savedTabs)) {
         return ((typeof savedTabs.tabsOrders) == 'string') ? savedTabs.tabsOrders : '';
-      } 
+      }
     }
     return '';
   },
-  //new functions
-  saveObjectToLocal: (storageKey, object) => {
+
+  saveObjectToLocal: async (storageKey, object) => {
     try {
-      const serializedObject = JSON.stringify(object, helper.replacer);
-      localStorage.setItem(storageKey, serializedObject);
+      const result = await helper.replaceFilesWithBase64(object);
+      if (result) {
+        localStorage.setItem(storageKey, JSON.stringify(result));
+      }
     } catch (error) {
       console.error(`Error saving object:`, error);
     }
   },
+  fileToBase64: async (file) => {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.onload = () => resolve(reader.result.split(',')[1]);
+      reader.onerror = error => reject(error);
+      return reader.readAsDataURL(file);
+    });
+    
+  },
   
-   getObjectFromLocal: (storageKey) => {
+  // Recursive function to replace file types with base64 content
+  replaceFilesWithBase64: (obj) => {
+    const promises = [];
+  
+    for (const key in obj) {
+      if (obj.hasOwnProperty(key)) {
+        const value = obj[key];
+  
+        if (typeof value === 'object' && value !== null) {
+          if (value instanceof File) {
+            promises.push(
+              helper.fileToBase64(value)
+                .then(base64Content => {
+                  obj[key] = {
+                      __type: 'file',
+                      name: value.name,
+                      type: value.type,
+                      content: base64Content
+                  };
+                })
+            );
+          } else {
+            promises.push(helper.replaceFilesWithBase64(value));
+          }
+        }
+      }
+    }
+  
+    return Promise.all(promises).then(() => obj);
+  },
+
+  replaceBase64WithFiles: (obj) => {
+    if (typeof obj === 'object' && obj !== null && obj.__type === 'file') {
+      const byteArray = helper.base64ToByteArray(obj.content);
+      const fileInstance = new File([byteArray], obj.name, { type: obj.type });
+      return fileInstance;
+    }
+
+    if (typeof obj === 'object' && obj !== null) {
+      if (Array.isArray(obj)) {
+        obj.forEach((element, i) => {
+          obj[i] = helper.replaceBase64WithFiles(element);
+        });
+      } else {
+        for (let key in obj) {
+          if (obj.hasOwnProperty(key)) {
+            obj[key] = helper.replaceBase64WithFiles(obj[key]);
+          }
+        }
+      }
+    }
+
+    return obj;
+},
+
+  getObjectFromLocal: (storageKey) => {
     try {
       const serializedObject = localStorage.getItem(storageKey);
-      if (serializedObject === null) {
-        return null;
+      if (serializedObject != "undefined" && serializedObject != undefined) {
+        const parsedData = JSON.parse(serializedObject);
+        const data = helper.replaceBase64WithFiles(parsedData);
+        return data;
       }
-      return JSON.parse(serializedObject, helper.reviver);
+      return null;
     } catch (error) {
       console.error(`Error retrieving object:`, error);
       return null;
     }
   },
-  
-  replacer: (key, value) => {
-    if (value instanceof File) {
-      // Handle File objects
-      return {
-        __type: 'file',
-        name: value.name,
-        type: value.type,
-        lastModified: value.lastModified
-      };
-    } else if (value instanceof Image) {
-      // Handle Image objects
-      return {
-        __type: 'image',
-        src: value.src
-      };
+
+  base64ToByteArray: (base64) => {
+    const binaryString = atob(base64);
+    const byteArray = new Uint8Array(binaryString.length);
+    for (let i = 0; i < binaryString.length; i++) {
+      byteArray[i] = binaryString.charCodeAt(i);
     }
-    // Return other values as is
-    return value;
-  },
-  reviver:(key, value) => {
-    if (value && typeof value === 'object' && '__type' in value) {
-      if (value.__type === 'file') {
-        // Restore File object
-        return new File([], value.name, { type: value.type, lastModified: value.lastModified });
-      } else if (value.__type === 'image') {
-        // Restore Image object
-        const img = new Image();
-        img.src = value.src;
-        return img;
-      }
-    }
-    // Return other values as is
-    return value;
+    return byteArray;
   }
 };
 export default helper;
