@@ -16,17 +16,14 @@ function useDynamicTabs(getDeps, options = {}) {
     const key = (api.optionsManager.options.storageKey?.length ? api.optionsManager.options.storageKey : 'igs-dynamic-tabs');	
     if (api.optionsManager.options.useStorage && true) {
       const name = api.optionsManager.options.name;
-      let ls = localStorage.getItem(key);
+      let storageState = helper.getObjectFromLocal(key);
       let upState = {
         [name]: state
       };
-      if (ls) {
-        let storageState = JSON.parse(ls);
-        if (storageState && (helper.isObj(storageState) || helper.isArray(storageState))) {
+      if (storageState && (helper.isObj(storageState) || helper.isArray(storageState))) {
           upState = {...storageState, ...upState};
-        }
       }
-      localStorage.setItem(`${key}`, JSON.stringify(upState));
+      helper.saveObjectToLocal(`${key}`, upState);
     } else {
       localStorage.removeItem(`${key}`);
     }

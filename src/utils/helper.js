@@ -88,9 +88,9 @@ const helper = {
    },
    getSavedTabs: (storageKey, name) => {
     const nowTime = new Date().getTime();
-    const ls = localStorage.getItem(storageKey);
+    const ls = helper.getObjectFromLocal(storageKey);
     if (ls) {
-      const savedTabs = JSON.parse(ls)[name];
+      const savedTabs = ls[name];
       if (helper.isObj(savedTabs)) {
         let draftTabs = savedTabs.draftTabs;
         if (draftTabs && helper.isObj(draftTabs)) {
@@ -102,22 +102,79 @@ const helper = {
     return {};
   },
   getSelectedTab: (storageKey, name) => {
-    const ls = localStorage.getItem(storageKey);
+    const ls = helper.getObjectFromLocal(storageKey);
     if (ls) {
-      const savedTabs = JSON.parse(ls)[name];
+      const savedTabs = ls[name];
       if (helper.isObj(savedTabs)) return savedTabs.selectedTabID;
     }
     return '';
   },
   getSavedTabsOrders: (storageKey, name) => {
-    const ls = localStorage.getItem(storageKey);
+    const ls = helper.getObjectFromLocal(storageKey);
     if (ls) {
-      const savedTabs = JSON.parse(ls)[name];
+      const savedTabs = ls[name];
       if (helper.isObj(savedTabs)) {
         return ((typeof savedTabs.tabsOrders) == 'string') ? savedTabs.tabsOrders : '';
       } 
     }
     return '';
+  },
+  //new functions
+  saveObjectToLocal: (storageKey, object) => {
+    try {
+      const serializedObject = JSON.stringify(object, helper.replacer);
+      localStorage.setItem(storageKey, serializedObject);
+    } catch (error) {
+      console.error(`Error saving object:`, error);
+    }
+  },
+  
+   getObjectFromLocal: (storageKey) => {
+    try {
+      const serializedObject = localStorage.getItem(storageKey);
+      if (serializedObject === null) {
+        return null;
+      }
+      return JSON.parse(serializedObject, helper.reviver);
+    } catch (error) {
+      console.error(`Error retrieving object:`, error);
+      return null;
+    }
+  },
+  
+  replacer: (key, value) => {
+    if (value instanceof File) {
+      // Handle File objects
+      return {
+        __type: 'file',
+        name: value.name,
+        type: value.type,
+        lastModified: value.lastModified
+      };
+    } else if (value instanceof Image) {
+      // Handle Image objects
+      return {
+        __type: 'image',
+        src: value.src
+      };
+    }
+    // Return other values as is
+    return value;
+  },
+  reviver:(key, value) => {
+    if (value && typeof value === 'object' && '__type' in value) {
+      if (value.__type === 'file') {
+        // Restore File object
+        return new File([], value.name, { type: value.type, lastModified: value.lastModified });
+      } else if (value.__type === 'image') {
+        // Restore Image object
+        const img = new Image();
+        img.src = value.src;
+        return img;
+      }
+    }
+    // Return other values as is
+    return value;
   }
 };
 export default helper;

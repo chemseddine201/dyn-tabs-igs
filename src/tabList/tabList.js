@@ -36,13 +36,10 @@ const TabList = memo(
             store: {
               get: function (sortable) {
                 var tabsOrders = [];
-                var ls = localStorage.getItem(sk);
-                if (ls) {
-                  var savedData = JSON.parse(ls);
-                  if (savedData[name]) {
+                var savedData = helper.getObjectFromLocal(sk);
+                if (savedData && savedData[name]) {
                     tabsOrders = savedData[name].tabsOrders;
                     return tabsOrders ? tabsOrders.split(',') : [];
-                  }
                 }
                 return tabsOrders;
               },
@@ -55,11 +52,10 @@ const TabList = memo(
                   tabsOrders.push("99999");
                 }
                 //get local storage
-                var ls = localStorage.getItem(sk);
-                if (ls) {
-                  var savedData = JSON.parse(ls);
+                var savedData = helper.getObjectFromLocal(sk);
+                if (savedData) {
                   savedData[name].tabsOrders = tabsOrders.join(',');
-                  localStorage.setItem(sk, JSON.stringify(savedData));
+                  helper.saveObjectToLocal(sk, savedData);
                   //save tabs orders on state
                   api.reorder(tabsOrders.join(','));
                 }
