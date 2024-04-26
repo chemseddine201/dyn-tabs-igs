@@ -118,11 +118,9 @@
     ]
   },
   "dependencies": {
-    "async-json": "^0.0.2",
     "prop-types": "^15.7.2",
     "react-sortablejs": "^6.1.4",
-    "sortablejs": "^1.15.0",
-    "yieldable-json": "^2.0.1"
+    "sortablejs": "^1.15.0"
   },
   "repository": {
     "type": "git",

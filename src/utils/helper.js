@@ -1,5 +1,3 @@
-import * as yj from 'yieldable-json';
-
 const helper = {
   checkArrIndex: (index, arrLength) => index >= 0 && index < arrLength,
   getInstance: function (Fn) {
