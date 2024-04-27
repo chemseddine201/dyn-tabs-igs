@@ -38,8 +38,8 @@ const TabList = memo(
                 var tabsOrders = [];
                 var savedData = helper.getObjectFromLocal(sk);
                 if (savedData && savedData[name]) {
-                    tabsOrders = savedData[name].tabsOrders;
-                    return tabsOrders ? tabsOrders.split(',') : [];
+                    tabsOrders = savedData[name]?.tabsOrders || "";
+                    return (tabsOrders && typeof tabsOrders === 'string') ? tabsOrders?.split(',') : [];
                 }
                 return tabsOrders;
               },

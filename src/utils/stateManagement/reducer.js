@@ -4,20 +4,25 @@ import helper from '../helper';
 export default function reducer(state, action) {
   switch (action.type) {
     case actions.close: {
+      const { tabId } = action;
+      
+      if (!Number.isInteger(tabId)) return state;
+
       var newTabsOrders = "";
-      const {openTabIDs: arr, draftTabs, tabsOrders} = state,
-      removedItemIndex = arr.indexOf(action.tabId);
+      let newArr = [];
+      const {openTabIDs: arr = [], draftTabs, tabsOrders} = state,
+      removedItemIndex = arr.indexOf(tabId);
       if (removedItemIndex >= 0) {
         //remove id
-        const newArr = arr.slice();
+        newArr = arr.slice();
         newArr.splice(removedItemIndex, 1);
         //remove tab if saved
-        if (draftTabs && draftTabs[action.tabId]) {
-          delete draftTabs[action.tabId];
+        if (draftTabs && typeof draftTabs === 'object' && draftTabs[tabId]) {
+          delete draftTabs[tabId];
         }
-        if (tabsOrders && tabsOrders.length) {
+        if (tabsOrders && (typeof tabsOrders === 'string') && tabsOrders.length) {
           let arr = tabsOrders.split(',');
-          arr = arr.filter(ele => ele !== action.tabId);
+          arr = arr.filter(ele => ele !== tabId);
           newTabsOrders = arr.join(',');
         }
         //return updated state state
@@ -55,21 +60,18 @@ export default function reducer(state, action) {
       return {...state, openTabIDs: newArr};
     }
     case actions.save: {
-      const { data } = action;
-      if(!data || !data.id) return state;
-      const id = parseInt(data.id, 10);
-      let { values } = data;
+      const { id, values } = action;
+      if (!Number.isInteger(+id) || typeof values !== 'object') {
+        return state;
+      }
+
       let oldData = state.draftTabs || {};
       if (oldData && helper.isObj(oldData) && values && Object.keys(values).length > 0) {
         values.lsExpiry = new Date().getTime() + state.lsMaxLifeTime;
-        oldData[id] = {
-          ...oldData[id],
-          ...values
-        };
+        oldData[id] = values;//replace with data values this part could used to handle reset with save function
       } else {
-        values = {};
         values.lsExpiry = new Date().getTime() - 18000000;
-        oldData[id] = values;
+        oldData[id] = {};
       }
       //
       return {...state, draftTabs: oldData};
@@ -86,22 +88,24 @@ export default function reducer(state, action) {
       if (draftTabs && draftTabs[tabId]) {
         delete draftTabs[tabId];
       }
-      if (tabsOrders && tabsOrders.length) {
+      if (tabsOrders && (typeof tabsOrders === 'string') && tabsOrders.length) {
         let arr = tabsOrders.split(',');
         arr = arr.filter(ele => ele !== tabId);
         newTabsOrders = arr.join(',');
       }
-      return {...state, openTabIDs: newArr, draftTabs, tabsOrders: newTabsOrders};
+      return {...state, draftTabs, tabsOrders: newTabsOrders};
     }
     case actions.rename: {
-      const { data } = action;
-      const id = parseInt(data.id, 10);
+      const { id, title } = action;
+      if(!Number.isInteger(+id) || typeof title !== 'string' || (title.length < 2) ) {
+        return state;
+      }
       let oldData = state.draftTabs ? state.draftTabs : {};
       if(oldData && oldData[id]) {
-        oldData[id].tabTitle = data.title;
+        oldData[id].tabTitle = title;
       } else {
         oldData[id] = {
-          tabTitle: data.title
+          tabTitle: title
         };
       }
       return {...state, draftTabs: oldData};
