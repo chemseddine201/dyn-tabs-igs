@@ -85,7 +85,9 @@ const _apiProps = {
     return this.getPreviousData();
   },
   getData: function () {
-    return this.helper.getCopyState(this.stateRef);
+    let restoredState  = Object.assign({}, this.helper.getCopyState(this.stateRef));
+    restoredState = this.helper.replaceBase64WithFiles(restoredState);
+    return restoredState; //this.helper.getCopyState(this.stateRef);
   },
   getCopyData: function () {
     return this.getData();

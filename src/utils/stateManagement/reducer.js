@@ -1,120 +1,167 @@
 import actions from './actions';
 import helper from '../helper';
 
+
+function closeTab(state, tabId) {
+  var { openTabIDs = [], draftTabs = {}, tabsOrders = '' } = state;
+
+  var removedItemIndex = openTabIDs.indexOf(tabId);
+  if (removedItemIndex === -1) {
+    return state;
+  }
+
+  var newArr = openTabIDs.slice();
+  newArr.splice(removedItemIndex, 1);
+
+  if (draftTabs && typeof draftTabs === 'object' && draftTabs[tabId]) {
+    delete draftTabs[tabId];
+  }
+
+  if (tabsOrders && typeof tabsOrders === 'string' && tabsOrders.length) {
+    var arr = tabsOrders.split(',').filter((ele) => ele !== tabId);
+    var newTabsOrders = arr.join(',');
+    return { ...state, openTabIDs: newArr, draftTabs, tabsOrders: newTabsOrders };
+  }
+
+  return { ...state, openTabIDs: newArr, draftTabs };
+}
+
+function openTab(state, tabId) {
+  var { openTabIDs = [] } = state;
+  if (openTabIDs.indexOf(tabId) === -1) {
+    var newArr = openTabIDs.slice();
+    newArr.push(tabId);
+    return { ...state, openTabIDs: newArr };
+  }
+  return state;
+}
+
+function refreshTab(state) {
+  return helper.getCopyState(state);
+}
+
+function activateTab(state, tabId) {
+  var { selectedTabID } = state;
+  if (selectedTabID && selectedTabID !== tabId) {
+    return { ...state, selectedTabID: tabId };
+  }
+  return state;
+}
+
+function sortTabs(state, { tabId: newArr = [] }) {
+  var { openTabIDs = [] } = state;
+
+  if (openTabIDs.length !== newArr.length) {
+    return state;
+  }
+
+  for (let i = 0; i < newArr.length; i++) {
+    if (openTabIDs.indexOf(newArr[i]) === -1) {
+      return state;
+    }
+  }
+
+  return { ...state, openTabIDs: newArr };
+}
+
+function saveTab(state, { id = undefined, values = null }) {
+
+  if (!id || typeof values !== 'object') {
+    return state;
+  }
+  var { draftTabs = {}, lsMaxLifeTime } = state;
+
+  if (draftTabs && helper.isObj(draftTabs) && values && Object.keys(values).length > 0) {
+    values.lsExpiry = new Date().getTime() + lsMaxLifeTime;
+    draftTabs[id] = values;
+  } else {
+    values.lsExpiry = new Date().getTime() - 18000000;
+    draftTabs[id] = {};
+  }
+
+  return { ...state, draftTabs };
+}
+
+function resetTab(state, tabId) {
+  var { draftTabs = {} } = state;
+  draftTabs[tabId] = {};
+  return {...state, draftTabs: draftTabs};
+}
+
+function removeTab(state, tabId) {
+  var { draftTabs = {}, tabsOrders = '' } = state;
+  var { draftTabs: newDraftTabs, tabsOrders: newTabsOrders } = removeTabHelper(draftTabs, tabsOrders, tabId);
+  return { ...state, draftTabs: newDraftTabs, tabsOrders: newTabsOrders };
+}
+
+function removeTabHelper(draftTabs, tabsOrders, tabId) {
+  if (draftTabs && draftTabs[tabId]) {
+    delete draftTabs[tabId];
+  }
+
+  if (tabsOrders && typeof tabsOrders === 'string' && tabsOrders.length) {
+    var arr = tabsOrders.split(',');
+    var newTabsOrders = arr.filter((ele) => ele !== tabId).join(',');
+    return { draftTabs, tabsOrders: newTabsOrders };
+  }
+
+  return { draftTabs };
+}
+
+function renameTab(state, { id, title }) {
+  if (!id || typeof title !== 'string' || title.length < 2) {
+    return state;
+  }
+
+  var draftTabs = state.draftTabs || {};
+
+  if (draftTabs && draftTabs[id]) {
+    draftTabs[id].tabTitle = title;
+  } else {
+    draftTabs[id] = {
+      tabTitle: title,
+    };
+  }
+
+  return { ...state, draftTabs };
+}
+
+function reorderTabs(state, tabsOrders) {
+  return { ...state, tabsOrders: tabsOrders };
+}
+
 export default function reducer(state, action) {
   switch (action.type) {
     case actions.close: {
-      const { tabId } = action;
-      
-      if (!Number.isInteger(tabId)) return state;
-
-      var newTabsOrders = "";
-      let newArr = [];
-      const {openTabIDs: arr = [], draftTabs, tabsOrders} = state,
-      removedItemIndex = arr.indexOf(tabId);
-      if (removedItemIndex >= 0) {
-        //remove id
-        newArr = arr.slice();
-        newArr.splice(removedItemIndex, 1);
-        //remove tab if saved
-        if (draftTabs && typeof draftTabs === 'object' && draftTabs[tabId]) {
-          delete draftTabs[tabId];
-        }
-        if (tabsOrders && (typeof tabsOrders === 'string') && tabsOrders.length) {
-          let arr = tabsOrders.split(',');
-          arr = arr.filter(ele => ele !== tabId);
-          newTabsOrders = arr.join(',');
-        }
-        //return updated state state
-        return {...state, openTabIDs: newArr, draftTabs, tabsOrders: newTabsOrders};
-      }
-      return state;
+      return closeTab(state, action.tabId);
     }
     case actions.open: {
-      const arr = state.openTabIDs,
-        tabId = action.tabId;
-      if (arr.indexOf(tabId) === -1) {
-        const newArr = arr.slice();
-        newArr.push(tabId);
-        return {...state, openTabIDs: newArr};
-      }
-      return state;
+      return openTab(state, action.tabId);
     }
-    case actions.refresh:
-      return helper.getCopyState(state);
+    case actions.refresh: {
+      return refreshTab(state);
+    }
     case actions.active: {
-      const tabId = action.tabId;
-      if (state.selectedTabID !== tabId) {
-        return {...state, selectedTabID: tabId};
-      }
-      return state;
+      return activateTab(state, action.tabId);
     }
     case actions.sort: {
-      const arr = state.openTabIDs,
-        newArr = action.tabId,
-        newArrCount = newArr.length;
-      if (arr.length !== newArrCount) return state;
-      for (let i = 0; i < newArrCount; i++) {
-        if (arr.indexOf(newArr[i]) === -1) return state;
-      }
-      return {...state, openTabIDs: newArr};
-    }
-    case actions.save: {
-      const { id, values } = action;
-      if (!Number.isInteger(+id) || typeof values !== 'object') {
-        return state;
-      }
-
-      let oldData = state.draftTabs || {};
-      if (oldData && helper.isObj(oldData) && values && Object.keys(values).length > 0) {
-        values.lsExpiry = new Date().getTime() + state.lsMaxLifeTime;
-        oldData[id] = values;//replace with data values this part could used to handle reset with save function
-      } else {
-        values.lsExpiry = new Date().getTime() - 18000000;
-        oldData[id] = {};
-      }
-      //
-      return {...state, draftTabs: oldData};
-    }
-    case actions.reset: {
-      const { tabId } = action;
-      let oldData = state.draftTabs || {};
-      oldData[tabId] = {};
-      return {...state, draftTabs: oldData};
-    }
-    case actions.remove: {
-      const { tabId } = action;
-      const { draftTabs, tabsOrders} = state;
-      if (draftTabs && draftTabs[tabId]) {
-        delete draftTabs[tabId];
-      }
-      if (tabsOrders && (typeof tabsOrders === 'string') && tabsOrders.length) {
-        let arr = tabsOrders.split(',');
-        arr = arr.filter(ele => ele !== tabId);
-        newTabsOrders = arr.join(',');
-      }
-      return {...state, draftTabs, tabsOrders: newTabsOrders};
+      return sortTabs(state, action.data);
     }
     case actions.rename: {
-      const { id, title } = action;
-      if(!Number.isInteger(+id) || typeof title !== 'string' || (title.length < 2) ) {
-        return state;
-      }
-      let oldData = state.draftTabs ? state.draftTabs : {};
-      if(oldData && oldData[id]) {
-        oldData[id].tabTitle = title;
-      } else {
-        oldData[id] = {
-          tabTitle: title
-        };
-      }
-      return {...state, draftTabs: oldData};
+      return renameTab(state, action.data);
+    }
+    case actions.save: {
+      return saveTab(state, action.data);
+    }
+    case actions.reset: {
+      return resetTab(state, action.tabId);
+    }
+    case actions.remove: {
+      return removeTab(state, action.tabId);
     }
     case actions.reorder: {
-      const { tabsOrders } = action;
-      return {...state, tabsOrders: tabsOrders};
+      return reorderTabs(state, action.tabsOrders);
     }
-
     default:
       throw new Error(`Undefined action type '${action.type}'`);
   }

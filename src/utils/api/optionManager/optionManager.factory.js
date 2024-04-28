@@ -1,6 +1,6 @@
 import React, { cloneElement } from 'react';
 import Helper from '../../helper.js';
-const {throwMissingParam: missingParamEr, getSavedTabs, getSelectedTab, getSavedTabsOrders} = Helper;
+const {throwMissingParam: missingParamEr, getSavedTabs, replaceBase64WithFiles, getSelectedTab, getSavedTabsOrders} = Helper;
 
 function OptionManager(getDeps, {options}) {
   const {globalDefaultOptions} = getDeps();
@@ -89,7 +89,7 @@ Object.assign(OptionManager.prototype, {
           title: title,
           closable: tab.closable || true,
           renamable: tab.renamable || true,
-          panelComponent: (props) => cloneElement(<DefaultPanelComponent {...props} />, {values: tab || {} }),
+          panelComponent: (props) => cloneElement(<DefaultPanelComponent {...props} />, {values: replaceBase64WithFiles(Object.assign({}, tab)) || {} }),
         };
         const _tab = this.validateTabData(newTab);
         savedTabs.push(_tab);

@@ -14,10 +14,15 @@ const Form = ({ api, ...props }) => {
     id="image" 
     name="image[]" 
     accept="image/*" 
+    multiple
     onChange={(e) => {
       e.preventDefault();
       e.stopPropagation();
-      setImage(e.target.files ? e.target.files[0] : undefined);
+      let files = [];
+      for (let i = 0; i < e.target.files.length; i++) {
+        files[i] = e.target.files[i];
+      }
+      setImage(files);
     }}
   />
   <div>

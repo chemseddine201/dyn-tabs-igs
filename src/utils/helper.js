@@ -8,7 +8,7 @@ const helper = {
     return {
       selectedTabID: state.selectedTabID,
       openTabIDs: (state.openTabIDs || []).slice(),
-      draftTabs: (state.draftTabs || {}),
+      draftTabs: state.draftTabs || {},
       name: `${state.name}`,
       tabsOrders: (state.tabsOrders || []).slice(),
       lsMaxLifeTime: state.lsMaxLifeTime,
@@ -90,13 +90,13 @@ const helper = {
     const nowTime = new Date().getTime();
     const ls = helper.getObjectFromLocal(storageKey);
     if (ls) {
-      const savedTabs = ls[name];
+      let savedTabs = ls[name];
       if (helper.isObj(savedTabs)) {
         let draftTabs = savedTabs.draftTabs;
         if (draftTabs && helper.isObj(draftTabs)) {
           draftTabs = helper.unsetExpiryElements(draftTabs, nowTime);
         }
-        return draftTabs
+        return draftTabs;
       }
     }
     return {};
@@ -130,6 +130,7 @@ const helper = {
       console.error(`Error saving object:`, error);
     }
   },
+
   fileToBase64: async (file) => {
     return new Promise((resolve, reject) => {
       const reader = new FileReader();
@@ -137,27 +138,27 @@ const helper = {
       reader.onerror = error => reject(error);
       return reader.readAsDataURL(file);
     });
-    
+
   },
-  
+
   // Recursive function to replace file types with base64 content
   replaceFilesWithBase64: (obj) => {
     const promises = [];
-  
+
     for (const key in obj) {
       if (obj.hasOwnProperty(key)) {
         const value = obj[key];
-  
+
         if (typeof value === 'object' && value !== null) {
           if (value instanceof File) {
             promises.push(
               helper.fileToBase64(value)
                 .then(base64Content => {
                   obj[key] = {
-                      __type: 'file',
-                      name: value.name,
-                      type: value.type,
-                      content: base64Content
+                    __type: 'file',
+                    name: value.name,
+                    type: value.type,
+                    content: base64Content
                   };
                 })
             );
@@ -167,41 +168,42 @@ const helper = {
         }
       }
     }
-  
+
     return Promise.all(promises).then(() => obj);
   },
-
   replaceBase64WithFiles: (obj) => {
     if (typeof obj === 'object' && obj !== null && obj.__type === 'file') {
       const byteArray = helper.base64ToByteArray(obj.content);
-      const fileInstance = new File([byteArray], obj.name, { type: obj.type });
-      return fileInstance;
-    }
-
+      const file = new File([byteArray], obj.name, { type: obj.type });
+      return file;
+    } 
+    
     if (typeof obj === 'object' && obj !== null) {
-      if (Array.isArray(obj)) {
-        obj.forEach((element, i) => {
-          obj[i] = helper.replaceBase64WithFiles(element);
-        });
+      if (obj instanceof File) {
+        return obj;
+      } else if (Array.isArray(obj)) {
+        const newArray = obj.map((element) => helper.replaceBase64WithFiles(element));
+        return [...newArray];
       } else {
+        const newObj = {};
         for (let key in obj) {
           if (obj.hasOwnProperty(key)) {
-            obj[key] = helper.replaceBase64WithFiles(obj[key]);
+            newObj[key] = helper.replaceBase64WithFiles(obj[key]);
           }
         }
+        return newObj;
       }
     }
-
+  
     return obj;
-},
+  },
 
   getObjectFromLocal: (storageKey) => {
     try {
       const serializedObject = localStorage.getItem(storageKey);
-      if (serializedObject != "undefined" && serializedObject != undefined) {
-        const parsedData = JSON.parse(serializedObject);
-        const data = helper.replaceBase64WithFiles(parsedData);
-        return data;
+      if (serializedObject) {
+        const result = helper.replaceBase64WithFiles(Object.assign({}, JSON.parse(serializedObject) || {}));
+        return result;
       }
       return null;
     } catch (error) {
