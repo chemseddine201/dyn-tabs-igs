@@ -1,61 +1,61 @@
-import React, {memo} from 'react';
-import {ApiContext, ForceUpdateContext, StateContext} from '../utils/context.js';
+import React, { memo } from 'react';
+import { ApiContext, ForceUpdateContext, StateContext } from '../utils/context.js';
 import TabPropsManager from './tabPropsManager.js';
 import PropTypes from 'prop-types';
 const TabComponent = function TabComponent(props) {
   React.useContext(ForceUpdateContext);
   const state = React.useContext(StateContext),
-  {openTabIDs} = state;
-  const {id, selectedTabID} = props,
+    { openTabIDs } = state;
+  const { id, selectedTabID } = props,
     api = React.useContext(ApiContext),
     TabInnerComponent = api.getOption('tabComponent'),
     tabObj = api.getTab(id),
-    propsManager = new TabPropsManager({api, id, isSelected: selectedTabID === id}),
+    propsManager = new TabPropsManager({ api, id, isSelected: selectedTabID === id }),
     clkHandler = function (e) {
-      api.eventHandlerFactory({e, id});
+      api.eventHandlerFactory({ e, id });
     };
 
-  const TabTitle = ({tabObj, ...props}) => {
+  const TabTitle = ({ tabObj, ...props }) => {
     return <div style={{
-      width:"100%",
-      minHeight:"100%",
+      width: "100%",
+      minHeight: "100%",
       display: "flex",
       justifyContent: "center"
     }}
-    onDoubleClick={(e)=> {
-      if (tabObj.renamable) {
-        e.target.setAttribute("contenteditable", true)
-      }
-    }} 
-    onBlur={(e)=>{
-      if (tabObj.renamable) {
-        e.target.setAttribute("contenteditable", false);
-        let tabName = (e.target.innerText.length < 3 ? api.getOption('defaultTabsName') : e.target.innerText);
-        if (e.target.innerText.length < 3) {
-          e.target.innerText = tabName;
+      onDoubleClick={(e) => {
+        if (tabObj.renamable) {
+          e.target.setAttribute("contenteditable", true)
         }
+      }}
+      onBlur={(e) => {
+        if (tabObj.renamable) {
+          e.target.setAttribute("contenteditable", false);
+          let tabName = (e.target.innerText.length < 3 ? api.getOption('defaultTabsName') : e.target.innerText);
+          if (e.target.innerText.length < 3) {
+            e.target.innerText = tabName;
+          }
 
-        //trigger tab rename event
-        api.rename({
-          tabId: tabObj.id, 
-          name: tabName
-        });
-      }
-    }}
-    onKeyDown={(e)=> {
-      try {
-        var key = e.which || e.keyCode || e.charCode;
-        if(key == 13 || key == 46 || e.target.innerText.length > 20) {
-          e.preventDefault();
-          return;
+          //trigger tab rename event
+          api.rename({
+            tabId: tabObj.id,
+            name: tabName
+          });
         }
-      } catch (error) {
-        e.preventDefault();
-      }
-    }}
-  >
-    {tabObj.title}
-  </div>
+      }}
+      onKeyDown={(e) => {
+        try {
+          var key = e.which || e.keyCode || e.charCode;
+          if (key == 13 || key == 46 || e.target.innerText.length > 20) {
+            e.preventDefault();
+            return;
+          }
+        } catch (error) {
+          e.preventDefault();
+        }
+      }}
+    >
+      {tabObj.title}
+    </div>
   }
 
   return (
@@ -64,10 +64,12 @@ const TabComponent = function TabComponent(props) {
       onClick={(e) => {
         clkHandler(e);
       }}>
-          <TabInnerComponent {...propsManager.getTabInnerProps()}>
-            <TabTitle tabObj={tabObj} />
-          </TabInnerComponent>
-          {tabObj.closable && (openTabIDs?.length > 1) ? <span {...propsManager.getCloseIconProps()}>&times;</span> : null}
+      <TabInnerComponent {...propsManager.getTabInnerProps()}>
+        <TabTitle tabObj={tabObj} />
+      </TabInnerComponent>
+      {tabObj.closable && (openTabIDs?.length > 1) ? <a
+        {...propsManager.getCloseIconProps()}
+        data-id={id}>&times;</a> : null}
     </li>
   );
 };
@@ -76,8 +78,8 @@ TabComponent.propTypes /* remove-proptypes */ = {
   selectedTabID: PropTypes.string
 };
 const Tab = memo(TabComponent, (oldProps, newProps) => {
-  const {id, selectedTabID: oldActiveId} = oldProps,
-    {selectedTabID: newActiveId} = newProps;
+  const { id, selectedTabID: oldActiveId } = oldProps,
+    { selectedTabID: newActiveId } = newProps;
   return oldActiveId === newActiveId || (id !== oldActiveId && id !== newActiveId);
 });
 export default Tab;

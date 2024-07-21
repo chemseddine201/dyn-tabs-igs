@@ -170,19 +170,19 @@ const _apiProps = {
     return result;
   },
   close: function (id = missingParamEr('close'), prompt = true, switching = true) {
+    
     if (this.stateRef?.openTabIDs?.length === 1) {//&& resetFirst
       return;
     }
-    const status = prompt ? confirm('Are you sure to close this tab?') : true;
-    if (status && true) {
-      if (id) id = id + ''; //make sure id is string
-      if (switching && this.isOpen(id) && this.isSelected(id)) {
-        const _openTabsId = [...this.stateRef.openTabIDs];
-        _openTabsId.splice(_openTabsId.indexOf(id), 1);
-        this.select(this._findTabIdForSwitching());
-        return this.__close(id);
-      } else return this.__close(id);
+
+    if (id) id = id + ''; //make sure id is string
+    if (switching && this.isOpen(id) && this.isSelected(id)) {
+      const _openTabsId = [...this.stateRef.openTabIDs];
+      _openTabsId.splice(_openTabsId.indexOf(id), 1);
+      this.select(this._findTabIdForSwitching()); 
     }
+    return this.__close(id);
+    
   },
   refresh: function () {
     const result = this._getFlushEffectsPromise();
@@ -266,17 +266,22 @@ Helper.setNoneEnumProps(_apiProps, {
   eventHandlerFactory: function ({e, id}) {
     const el = e.target,
       parentEl = el.parentElement,
-      {closeClass, tabClass} = this.optionsManager.setting;
+      {tabClass} = this.optionsManager.setting;
+      
     if (
-      el.className.includes(closeClass) &&
+      el.className.includes("show-modal") &&
       parentEl &&
       parentEl.lastChild &&
       parentEl.lastChild == el &&
       parentEl.className.includes(tabClass)
     ) {
-      this.getOption('beforeClose').call(this.userProxy, e, id) !== false && this.close(id, true);
+      const elem = document.getElementById("close-tab-modal");
+      if (elem) {
+        elem.classList.add("open");
+        elem.setAttribute("data-id", id);
+      }
     } else {
-      this.getOption('beforeSelect').call(this.userProxy, e, id) !== false && this.select(id);
+      (this.getOption('beforeSelect').call(this.userProxy, e, id) !== false) && this.select(id);
     }
   },
 });

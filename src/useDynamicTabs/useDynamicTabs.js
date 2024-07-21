@@ -1,7 +1,7 @@
 import React, {useState, useReducer, useLayoutEffect, useRef} from 'react';
 import helper from '../utils/helper';
 function useDynamicTabs(getDeps, options = {}) {
-  const {reducer, getApiInstance, PanelList, TabList, ApiContext, StateContext, ForceUpdateContext} = getDeps();
+  const {reducer, getApiInstance, PanelList, TabList, Modal, ApiContext, StateContext, ForceUpdateContext} = getDeps();
   const ref = useRef(null);
   if (ref.current === null)
     ref.current = {api: getApiInstance(options), TabListComponent: null, PanelListComponent: null};
@@ -59,6 +59,7 @@ function useDynamicTabs(getDeps, options = {}) {
           <StateContext.Provider value={api.stateRef}>
             <ForceUpdateContext.Provider value={api.forceUpdateState}>
               <TabList {...props}>{props.children}</TabList>
+              <Modal />
             </ForceUpdateContext.Provider>
           </StateContext.Provider>
         </ApiContext.Provider>
