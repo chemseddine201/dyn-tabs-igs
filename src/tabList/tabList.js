@@ -94,8 +94,8 @@ const TabList = memo(
               .catch(e => console.error(e))
             }}
           >
-            <div className="rc-dyn-tabs-title add-btn">
-              <div className="plus"></div>
+            <div className="rc-dyn-tabs-title rc-dyn-tabs-add-btn">
+              <div className="rc-dyn-tabs-plus"></div>
             </div>
           </li>
         ) : null

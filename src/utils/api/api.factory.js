@@ -269,15 +269,15 @@ Helper.setNoneEnumProps(_apiProps, {
       {tabClass} = this.optionsManager.setting;
       
     if (
-      el.className.includes("show-modal") &&
+      el.className.includes("rc-dyn-tabs-show-modal") &&
       parentEl &&
       parentEl.lastChild &&
       parentEl.lastChild == el &&
       parentEl.className.includes(tabClass)
     ) {
-      const elem = document.getElementById("close-tab-modal");
+      const elem = document.getElementById("rc-dyn-tabs-close-modal");
       if (elem) {
-        elem.classList.add("open");
+        elem.classList.add("rc-dyn-tabs-open");
         elem.setAttribute("data-id", id);
       }
     } else {

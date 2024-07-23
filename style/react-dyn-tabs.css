@@ -121,7 +121,7 @@
   float: right;
 }
 
-.plus {
+.rc-dyn-tabs-plus {
   display: block;
   height: 0.6em;
   width: 0.6em;
@@ -138,19 +138,19 @@
   background-color: rgba(255, 255, 255, 0);
 }
 
-.plus::before {
+.rc-dyn-tabs-plus::before {
   display: block;
   content: "+";
 }
 
-.add-btn {
+.rc-dyn-tabs-add-btn {
   max-width: 50px !important;
   min-width: 50px !important;
   width: 50px !important;
   cursor: pointer;
 }
 
-.show-modal {
+.rc-dyn-tabs-show-modal {
   text-decoration: none;
 }
 
@@ -172,7 +172,7 @@
     opacity: 1;
   }
 }
-.modal {
+.rc-dyn-tabs-modal {
   font-family: inherit;
   visibility: hidden;
   opacity: 0;
@@ -187,7 +187,7 @@
   background: rgba(77, 77, 77, 0.7);
   transition: all 0.4s;
 }
-.modal h1.close-title {
+.rc-dyn-tabs-modal h1.rc-dyn-tabs-close-title {
   display: flex;
   width: 100%;
   justify-content: center;
@@ -197,7 +197,7 @@
   font-weight: bold;
   margin: 0;
 }
-.modal p.close-message {
+.rc-dyn-tabs-modal p.rc-dyn-tabs-close-message {
   font-size: 0.9em;
   font-weight: 500;
   text-align: center;
@@ -205,13 +205,13 @@
   margin: 1rem 0;
 }
 
-.open {
+.rc-dyn-tabs-open {
   visibility: visible;
   display: flex;
   opacity: 1;
 }
 
-.modal__content {
+.rc-dyn-tabs-modal__content {
   border-radius: 4px;
   position: relative;
   min-width: 350px;
@@ -220,13 +220,13 @@
   padding: 2em 2.25em;
 }
 
-.modal__footer {
+.rc-dyn-tabs-modal__footer {
   display: flex;
   justify-content: center;
   text-align: center;
   margin-top: 30px;
 }
-.modal__footer span {
+.rc-dyn-tabs-modal__footer span {
   cursor: pointer;
   padding: 7px 15px;
   border-radius: 0.358rem;
@@ -237,32 +237,32 @@
   min-width: 60px;
   font-size: 1rem;
 }
-.modal__footer span.modal__close {
+.rc-dyn-tabs-modal__footer span.rc-dyn-tabs-modal__close {
   background: #ea5455;
   color: white;
 }
-.modal__footer span.modal__close:hover {
+.rc-dyn-tabs-modal__footer span.rc-dyn-tabs-modal__close:hover {
   box-shadow: 0 8px 25px -8px #ea5455;
 }
-.modal__footer span.modal__cancel {
+.rc-dyn-tabs-modal__footer span.rc-dyn-tabs-modal__cancel {
   background: rgb(255, 255, 255);
   color: #676767;
   border: 1px solid #b5b5b5;
 }
-.modal__footer span.modal__cancel:hover {
+.rc-dyn-tabs-modal__footer span.rc-dyn-tabs-modal__cancel:hover {
   box-shadow: 0 8px 25px -8px #676767;
 }
 
-.modal-icon.modal-question.modal-icon-show {
+.rc-dyn-tabs-modal-icon.rc-dyn-tabs-modal-question.rc-dyn-tabs-modal-icon-show {
   animation: modal-animate-error-icon 0.5s;
 }
 
-.modal-icon.modal-question {
+.rc-dyn-tabs-modal-icon.rc-dyn-tabs-modal-question {
   border-color: #c9dae1;
   color: #87adbd;
 }
 
-.modal-icon {
+.rc-dyn-tabs-modal-icon {
   position: relative;
   box-sizing: content-box;
   justify-content: center;
@@ -278,17 +278,17 @@
   -webkit-user-select: none;
 }
 
-.modal-icon.modal-question.modal-icon-show .modal-icon-content {
+.rc-dyn-tabs-modal-icon.rc-dyn-tabs-modal-question.rc-dyn-tabs-modal-icon-show .rc-dyn-tabs-modal-icon-content {
   animation: modal-animate-question-mark 0.8s;
 }
 
-.modal-icon .modal-icon-content {
+.rc-dyn-tabs-modal-icon .rc-dyn-tabs-modal-icon-content {
   display: flex;
   align-items: center;
   font-size: 2.1em;
 }
 
-span.absolute-top {
+span.rc-dyn-tabs-absolute-top {
   cursor: pointer;
   position: absolute;
   top: 10px;
@@ -297,6 +297,6 @@ span.absolute-top {
   text-decoration: none;
   font-size: 25px;
 }
-span.absolute-top:hover {
+span.rc-dyn-tabs-absolute-top:hover {
   color: #ea5455;
 }

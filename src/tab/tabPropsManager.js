@@ -64,7 +64,7 @@ TabPropsManager.prototype.getTabInnerProps = function () {
 };
 TabPropsManager.prototype.getCloseIconProps = function () {
   const outputProps = {
-    className: this._setting.closeClass + ' show-modal',
+    className: this._setting.closeClass + ' rc-dyn-tabs-show-modal',
   };
   // check if accessibility option is enable
   if (this._op.accessibility) {
