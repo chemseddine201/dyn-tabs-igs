@@ -81,8 +81,10 @@
   padding-right: 0.4em;
 }
 .rc-dyn-tabs-tablist.rc-dyn-tabs-ltr > .rc-dyn-tabs-tab > .rc-dyn-tabs-close {
-  right: 4px;
+  right: 0px;
   left: auto;
+  font-size: 30px;
+  top: 8px;
 }
 
 .rc-dyn-tabs-tablist.rc-dyn-tabs-rtl > .rc-dyn-tabs-tab {

@@ -95,8 +95,10 @@
       }
 
       & > .rc-dyn-tabs-close {
-        right: 4px;
+        right: 0px;
         left: auto;
+        font-size: 30px;
+        top: 8px;
       }
     }
   }
